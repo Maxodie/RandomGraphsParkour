@@ -2,9 +2,9 @@
 
 ## Dependencies
 The project contains git submodules, the CMakeLists.txt should update them but if it does not just do
-``bash
+```bash
 git submodule update --init --recursive --checkout
-``
+```
 this project uses different external libs:
 * Glad (opengl 3.3)
 * [Glfw3](https://github.com/glfw/glfw)
