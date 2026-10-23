@@ -1,0 +1,10 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/ubuntu/Desktop/App/RandomGraphsParkour/build/cmake_install.cmake",
+		"/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/cmake_install.cmake",
+		"/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src/cmake_install.cmake",
+		"/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/docs/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

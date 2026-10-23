@@ -1,0 +1,50 @@
+{
+    "version": 1,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 50,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "debug",
+            "displayName": "Debug",
+            "description": "Debug build",
+            "generator": "Unix Makefiles",
+            "binaryDir": "${sourceDir}/build",
+            "cacheVariables": {
+                "CMAKE_C_FLAGS": "-g -O0 -fstandalone-debug -Wno-format-security -Wno-deprecated-declarations -Wno-format-nonliteral -DRGP_LOGGER -DRGP_ASSERT_CORE",
+                "CMAKE_C_STANDARD": "23",
+                "CMAKE_C_STANDARD_REQUIRED": "YES",
+                "CMAKE_C_EXTENSIONS": "OFF",
+                "CMAKE_C_COMPILER": "clang",
+
+                "CMAKE_CXX_FLAGS": "-g -O0 -fstandalone-debug -Wno-format-security -Wno-deprecated-declarations -Wno-format-nonliteral -DRGP_LOGGER -DRGP_ASSERT_CORE",
+                "CMAKE_CXX_STANDARD": "23",
+                "CMAKE_CXX_STANDARD_REQUIRED": "YES",
+                "CMAKE_CXX_EXTENSIONS": "OFF",
+                "CMAKE_CXX_COMPILER": "clang++"
+            }
+        },
+        {
+            "name": "release",
+            "displayName": "Release",
+            "description": "Release build",
+            "generator": "Unix Makefiles",
+            "binaryDir": "${sourceDir}/build",
+            "cacheVariables": {
+                "CMAKE_C_FLAGS": "-O3",
+                "CMAKE_C_STANDARD": "23",
+                "CMAKE_C_STANDARD_REQUIRED": "YES",
+                "CMAKE_C_EXTENSIONS": "OFF",
+                "CMAKE_C_COMPILER": "clang",
+
+                "CMAKE_CXX_FLAGS": "-O3",
+                "CMAKE_CXX_STANDARD": "23",
+                "CMAKE_CXX_STANDARD_REQUIRED": "YES",
+                "CMAKE_CXX_EXTENSIONS": "OFF",
+                "CMAKE_CXX_COMPILER": "clang++"
+            }
+        }
+    ]
+}

@@ -1,0 +1,164 @@
+[
+{
+  "directory": "/home/ubuntu/Desktop/App/RandomGraphsParkour/build",
+  "command": "/usr/bin/clang  -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/glad/glad/include -g -O0 -fstandalone-debug -Wno-format-security -Wno-deprecated-declarations -Wno-format-nonliteral -DRGP_LOGGER -DRGP_ASSERT_CORE -std=c23 -o3 -o CMakeFiles/glad.dir/RandomGraphsParkour/vendors/glad/glad/src/glad.c.o -c /home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/glad/glad/src/glad.c",
+  "file": "/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/glad/glad/src/glad.c",
+  "output": "CMakeFiles/glad.dir/RandomGraphsParkour/vendors/glad/glad/src/glad.c.o"
+},
+{
+  "directory": "/home/ubuntu/Desktop/App/RandomGraphsParkour/build",
+  "command": "/usr/bin/clang  -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/src -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/include -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/glad/glad/include -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/nuklear/nuklear -g -O0 -fstandalone-debug -Wno-format-security -Wno-deprecated-declarations -Wno-format-nonliteral -DRGP_LOGGER -DRGP_ASSERT_CORE -std=c23 -o CMakeFiles/RandomGraphsParkour.dir/RandomGraphsParkour/src/Application.c.o -c /home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/src/Application.c",
+  "file": "/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/src/Application.c",
+  "output": "CMakeFiles/RandomGraphsParkour.dir/RandomGraphsParkour/src/Application.c.o"
+},
+{
+  "directory": "/home/ubuntu/Desktop/App/RandomGraphsParkour/build",
+  "command": "/usr/bin/clang  -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/src -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/include -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/glad/glad/include -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/nuklear/nuklear -g -O0 -fstandalone-debug -Wno-format-security -Wno-deprecated-declarations -Wno-format-nonliteral -DRGP_LOGGER -DRGP_ASSERT_CORE -std=c23 -o CMakeFiles/RandomGraphsParkour.dir/RandomGraphsParkour/src/EntryPoint.c.o -c /home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/src/EntryPoint.c",
+  "file": "/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/src/EntryPoint.c",
+  "output": "CMakeFiles/RandomGraphsParkour.dir/RandomGraphsParkour/src/EntryPoint.c.o"
+},
+{
+  "directory": "/home/ubuntu/Desktop/App/RandomGraphsParkour/build",
+  "command": "/usr/bin/clang  -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/src -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/include -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/glad/glad/include -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/nuklear/nuklear -g -O0 -fstandalone-debug -Wno-format-security -Wno-deprecated-declarations -Wno-format-nonliteral -DRGP_LOGGER -DRGP_ASSERT_CORE -std=c23 -o CMakeFiles/RandomGraphsParkour.dir/RandomGraphsParkour/src/Log/Log.c.o -c /home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/src/Log/Log.c",
+  "file": "/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/src/Log/Log.c",
+  "output": "CMakeFiles/RandomGraphsParkour.dir/RandomGraphsParkour/src/Log/Log.c.o"
+},
+{
+  "directory": "/home/ubuntu/Desktop/App/RandomGraphsParkour/build",
+  "command": "/usr/bin/clang  -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/src -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/include -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/glad/glad/include -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/nuklear/nuklear -g -O0 -fstandalone-debug -Wno-format-security -Wno-deprecated-declarations -Wno-format-nonliteral -DRGP_LOGGER -DRGP_ASSERT_CORE -std=c23 -o CMakeFiles/RandomGraphsParkour.dir/RandomGraphsParkour/src/Window/Window.c.o -c /home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/src/Window/Window.c",
+  "file": "/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/src/Window/Window.c",
+  "output": "CMakeFiles/RandomGraphsParkour.dir/RandomGraphsParkour/src/Window/Window.c.o"
+},
+{
+  "directory": "/home/ubuntu/Desktop/App/RandomGraphsParkour/build",
+  "command": "/usr/bin/clang  -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/src -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/include -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/glad/glad/include -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/nuklear/nuklear -g -O0 -fstandalone-debug -Wno-format-security -Wno-deprecated-declarations -Wno-format-nonliteral -DRGP_LOGGER -DRGP_ASSERT_CORE -std=c23 -o CMakeFiles/RandomGraphsParkour.dir/RandomGraphsParkour/src/GUILayer/GUILayer.c.o -c /home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/src/GUILayer/GUILayer.c",
+  "file": "/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/src/GUILayer/GUILayer.c",
+  "output": "CMakeFiles/RandomGraphsParkour.dir/RandomGraphsParkour/src/GUILayer/GUILayer.c.o"
+},
+{
+  "directory": "/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src",
+  "command": "/usr/bin/clang -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/include -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src -I/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src -g -O0 -fstandalone-debug -Wno-format-security -Wno-deprecated-declarations -Wno-format-nonliteral -DRGP_LOGGER -DRGP_ASSERT_CORE -std=c99 -fPIC -Wall -o CMakeFiles/glfw.dir/context.c.o -c /home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/context.c",
+  "file": "/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/context.c",
+  "output": "RandomGraphsParkour/vendors/GLFW/glfw/src/CMakeFiles/glfw.dir/context.c.o"
+},
+{
+  "directory": "/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src",
+  "command": "/usr/bin/clang -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/include -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src -I/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src -g -O0 -fstandalone-debug -Wno-format-security -Wno-deprecated-declarations -Wno-format-nonliteral -DRGP_LOGGER -DRGP_ASSERT_CORE -std=c99 -fPIC -Wall -o CMakeFiles/glfw.dir/init.c.o -c /home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/init.c",
+  "file": "/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/init.c",
+  "output": "RandomGraphsParkour/vendors/GLFW/glfw/src/CMakeFiles/glfw.dir/init.c.o"
+},
+{
+  "directory": "/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src",
+  "command": "/usr/bin/clang -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/include -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src -I/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src -g -O0 -fstandalone-debug -Wno-format-security -Wno-deprecated-declarations -Wno-format-nonliteral -DRGP_LOGGER -DRGP_ASSERT_CORE -std=c99 -fPIC -Wall -o CMakeFiles/glfw.dir/input.c.o -c /home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/input.c",
+  "file": "/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/input.c",
+  "output": "RandomGraphsParkour/vendors/GLFW/glfw/src/CMakeFiles/glfw.dir/input.c.o"
+},
+{
+  "directory": "/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src",
+  "command": "/usr/bin/clang -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/include -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src -I/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src -g -O0 -fstandalone-debug -Wno-format-security -Wno-deprecated-declarations -Wno-format-nonliteral -DRGP_LOGGER -DRGP_ASSERT_CORE -std=c99 -fPIC -Wall -o CMakeFiles/glfw.dir/monitor.c.o -c /home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/monitor.c",
+  "file": "/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/monitor.c",
+  "output": "RandomGraphsParkour/vendors/GLFW/glfw/src/CMakeFiles/glfw.dir/monitor.c.o"
+},
+{
+  "directory": "/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src",
+  "command": "/usr/bin/clang -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/include -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src -I/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src -g -O0 -fstandalone-debug -Wno-format-security -Wno-deprecated-declarations -Wno-format-nonliteral -DRGP_LOGGER -DRGP_ASSERT_CORE -std=c99 -fPIC -Wall -o CMakeFiles/glfw.dir/platform.c.o -c /home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/platform.c",
+  "file": "/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/platform.c",
+  "output": "RandomGraphsParkour/vendors/GLFW/glfw/src/CMakeFiles/glfw.dir/platform.c.o"
+},
+{
+  "directory": "/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src",
+  "command": "/usr/bin/clang -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/include -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src -I/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src -g -O0 -fstandalone-debug -Wno-format-security -Wno-deprecated-declarations -Wno-format-nonliteral -DRGP_LOGGER -DRGP_ASSERT_CORE -std=c99 -fPIC -Wall -o CMakeFiles/glfw.dir/vulkan.c.o -c /home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/vulkan.c",
+  "file": "/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/vulkan.c",
+  "output": "RandomGraphsParkour/vendors/GLFW/glfw/src/CMakeFiles/glfw.dir/vulkan.c.o"
+},
+{
+  "directory": "/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src",
+  "command": "/usr/bin/clang -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/include -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src -I/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src -g -O0 -fstandalone-debug -Wno-format-security -Wno-deprecated-declarations -Wno-format-nonliteral -DRGP_LOGGER -DRGP_ASSERT_CORE -std=c99 -fPIC -Wall -o CMakeFiles/glfw.dir/window.c.o -c /home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/window.c",
+  "file": "/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/window.c",
+  "output": "RandomGraphsParkour/vendors/GLFW/glfw/src/CMakeFiles/glfw.dir/window.c.o"
+},
+{
+  "directory": "/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src",
+  "command": "/usr/bin/clang -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/include -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src -I/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src -g -O0 -fstandalone-debug -Wno-format-security -Wno-deprecated-declarations -Wno-format-nonliteral -DRGP_LOGGER -DRGP_ASSERT_CORE -std=c99 -fPIC -Wall -o CMakeFiles/glfw.dir/egl_context.c.o -c /home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/egl_context.c",
+  "file": "/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/egl_context.c",
+  "output": "RandomGraphsParkour/vendors/GLFW/glfw/src/CMakeFiles/glfw.dir/egl_context.c.o"
+},
+{
+  "directory": "/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src",
+  "command": "/usr/bin/clang -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/include -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src -I/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src -g -O0 -fstandalone-debug -Wno-format-security -Wno-deprecated-declarations -Wno-format-nonliteral -DRGP_LOGGER -DRGP_ASSERT_CORE -std=c99 -fPIC -Wall -o CMakeFiles/glfw.dir/osmesa_context.c.o -c /home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/osmesa_context.c",
+  "file": "/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/osmesa_context.c",
+  "output": "RandomGraphsParkour/vendors/GLFW/glfw/src/CMakeFiles/glfw.dir/osmesa_context.c.o"
+},
+{
+  "directory": "/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src",
+  "command": "/usr/bin/clang -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/include -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src -I/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src -g -O0 -fstandalone-debug -Wno-format-security -Wno-deprecated-declarations -Wno-format-nonliteral -DRGP_LOGGER -DRGP_ASSERT_CORE -std=c99 -fPIC -Wall -o CMakeFiles/glfw.dir/null_init.c.o -c /home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/null_init.c",
+  "file": "/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/null_init.c",
+  "output": "RandomGraphsParkour/vendors/GLFW/glfw/src/CMakeFiles/glfw.dir/null_init.c.o"
+},
+{
+  "directory": "/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src",
+  "command": "/usr/bin/clang -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/include -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src -I/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src -g -O0 -fstandalone-debug -Wno-format-security -Wno-deprecated-declarations -Wno-format-nonliteral -DRGP_LOGGER -DRGP_ASSERT_CORE -std=c99 -fPIC -Wall -o CMakeFiles/glfw.dir/null_monitor.c.o -c /home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/null_monitor.c",
+  "file": "/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/null_monitor.c",
+  "output": "RandomGraphsParkour/vendors/GLFW/glfw/src/CMakeFiles/glfw.dir/null_monitor.c.o"
+},
+{
+  "directory": "/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src",
+  "command": "/usr/bin/clang -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/include -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src -I/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src -g -O0 -fstandalone-debug -Wno-format-security -Wno-deprecated-declarations -Wno-format-nonliteral -DRGP_LOGGER -DRGP_ASSERT_CORE -std=c99 -fPIC -Wall -o CMakeFiles/glfw.dir/null_window.c.o -c /home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/null_window.c",
+  "file": "/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/null_window.c",
+  "output": "RandomGraphsParkour/vendors/GLFW/glfw/src/CMakeFiles/glfw.dir/null_window.c.o"
+},
+{
+  "directory": "/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src",
+  "command": "/usr/bin/clang -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/include -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src -I/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src -g -O0 -fstandalone-debug -Wno-format-security -Wno-deprecated-declarations -Wno-format-nonliteral -DRGP_LOGGER -DRGP_ASSERT_CORE -std=c99 -fPIC -Wall -o CMakeFiles/glfw.dir/null_joystick.c.o -c /home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/null_joystick.c",
+  "file": "/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/null_joystick.c",
+  "output": "RandomGraphsParkour/vendors/GLFW/glfw/src/CMakeFiles/glfw.dir/null_joystick.c.o"
+},
+{
+  "directory": "/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src",
+  "command": "/usr/bin/clang -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/include -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src -I/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src -g -O0 -fstandalone-debug -Wno-format-security -Wno-deprecated-declarations -Wno-format-nonliteral -DRGP_LOGGER -DRGP_ASSERT_CORE -std=c99 -fPIC -Wall -o CMakeFiles/glfw.dir/posix_module.c.o -c /home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/posix_module.c",
+  "file": "/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/posix_module.c",
+  "output": "RandomGraphsParkour/vendors/GLFW/glfw/src/CMakeFiles/glfw.dir/posix_module.c.o"
+},
+{
+  "directory": "/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src",
+  "command": "/usr/bin/clang -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/include -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src -I/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src -g -O0 -fstandalone-debug -Wno-format-security -Wno-deprecated-declarations -Wno-format-nonliteral -DRGP_LOGGER -DRGP_ASSERT_CORE -std=c99 -fPIC -Wall -o CMakeFiles/glfw.dir/posix_time.c.o -c /home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/posix_time.c",
+  "file": "/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/posix_time.c",
+  "output": "RandomGraphsParkour/vendors/GLFW/glfw/src/CMakeFiles/glfw.dir/posix_time.c.o"
+},
+{
+  "directory": "/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src",
+  "command": "/usr/bin/clang -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/include -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src -I/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src -g -O0 -fstandalone-debug -Wno-format-security -Wno-deprecated-declarations -Wno-format-nonliteral -DRGP_LOGGER -DRGP_ASSERT_CORE -std=c99 -fPIC -Wall -o CMakeFiles/glfw.dir/posix_thread.c.o -c /home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/posix_thread.c",
+  "file": "/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/posix_thread.c",
+  "output": "RandomGraphsParkour/vendors/GLFW/glfw/src/CMakeFiles/glfw.dir/posix_thread.c.o"
+},
+{
+  "directory": "/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src",
+  "command": "/usr/bin/clang -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/include -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src -I/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src -g -O0 -fstandalone-debug -Wno-format-security -Wno-deprecated-declarations -Wno-format-nonliteral -DRGP_LOGGER -DRGP_ASSERT_CORE -std=c99 -fPIC -Wall -o CMakeFiles/glfw.dir/wl_init.c.o -c /home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/wl_init.c",
+  "file": "/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/wl_init.c",
+  "output": "RandomGraphsParkour/vendors/GLFW/glfw/src/CMakeFiles/glfw.dir/wl_init.c.o"
+},
+{
+  "directory": "/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src",
+  "command": "/usr/bin/clang -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/include -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src -I/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src -g -O0 -fstandalone-debug -Wno-format-security -Wno-deprecated-declarations -Wno-format-nonliteral -DRGP_LOGGER -DRGP_ASSERT_CORE -std=c99 -fPIC -Wall -o CMakeFiles/glfw.dir/wl_monitor.c.o -c /home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/wl_monitor.c",
+  "file": "/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/wl_monitor.c",
+  "output": "RandomGraphsParkour/vendors/GLFW/glfw/src/CMakeFiles/glfw.dir/wl_monitor.c.o"
+},
+{
+  "directory": "/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src",
+  "command": "/usr/bin/clang -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/include -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src -I/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src -g -O0 -fstandalone-debug -Wno-format-security -Wno-deprecated-declarations -Wno-format-nonliteral -DRGP_LOGGER -DRGP_ASSERT_CORE -std=c99 -fPIC -Wall -o CMakeFiles/glfw.dir/wl_window.c.o -c /home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/wl_window.c",
+  "file": "/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/wl_window.c",
+  "output": "RandomGraphsParkour/vendors/GLFW/glfw/src/CMakeFiles/glfw.dir/wl_window.c.o"
+},
+{
+  "directory": "/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src",
+  "command": "/usr/bin/clang -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/include -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src -I/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src -g -O0 -fstandalone-debug -Wno-format-security -Wno-deprecated-declarations -Wno-format-nonliteral -DRGP_LOGGER -DRGP_ASSERT_CORE -std=c99 -fPIC -Wall -o CMakeFiles/glfw.dir/linux_joystick.c.o -c /home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/linux_joystick.c",
+  "file": "/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/linux_joystick.c",
+  "output": "RandomGraphsParkour/vendors/GLFW/glfw/src/CMakeFiles/glfw.dir/linux_joystick.c.o"
+},
+{
+  "directory": "/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src",
+  "command": "/usr/bin/clang -DHAVE_MEMFD_CREATE -D_DEFAULT_SOURCE -D_GLFW_WAYLAND -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/include -I/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src -I/home/ubuntu/Desktop/App/RandomGraphsParkour/build/RandomGraphsParkour/vendors/GLFW/glfw/src -g -O0 -fstandalone-debug -Wno-format-security -Wno-deprecated-declarations -Wno-format-nonliteral -DRGP_LOGGER -DRGP_ASSERT_CORE -std=c99 -fPIC -Wall -o CMakeFiles/glfw.dir/posix_poll.c.o -c /home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/posix_poll.c",
+  "file": "/home/ubuntu/Desktop/App/RandomGraphsParkour/RandomGraphsParkour/vendors/GLFW/glfw/src/posix_poll.c",
+  "output": "RandomGraphsParkour/vendors/GLFW/glfw/src/CMakeFiles/glfw.dir/posix_poll.c.o"
+}
+]
