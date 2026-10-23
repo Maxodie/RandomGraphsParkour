@@ -1,3 +1,8 @@
+#custom build folder and exported compile commands
+build/
+bin/
+.clang
+
 # Prerequisites
 *.d
 
