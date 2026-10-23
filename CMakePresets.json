@@ -13,13 +13,13 @@
             "generator": "Unix Makefiles",
             "binaryDir": "${sourceDir}/build",
             "cacheVariables": {
-                "CMAKE_C_FLAGS": "-g -O0 -fstandalone-debug -Wno-format-security -Wno-deprecated-declarations -Wno-format-nonliteral -DRGP_LOGGER -DRGP_ASSERT_CORE",
+                "CMAKE_C_FLAGS": "-g -O0 -DRGP_LOGGER -DRGP_ASSERT_CORE",
                 "CMAKE_C_STANDARD": "23",
                 "CMAKE_C_STANDARD_REQUIRED": "YES",
                 "CMAKE_C_EXTENSIONS": "OFF",
                 "CMAKE_C_COMPILER": "clang",
 
-                "CMAKE_CXX_FLAGS": "-g -O0 -fstandalone-debug -Wno-format-security -Wno-deprecated-declarations -Wno-format-nonliteral -DRGP_LOGGER -DRGP_ASSERT_CORE",
+                "CMAKE_CXX_FLAGS": "-g -O0 -DRGP_LOGGER -DRGP_ASSERT_CORE",
                 "CMAKE_CXX_STANDARD": "23",
                 "CMAKE_CXX_STANDARD_REQUIRED": "YES",
                 "CMAKE_CXX_EXTENSIONS": "OFF",
