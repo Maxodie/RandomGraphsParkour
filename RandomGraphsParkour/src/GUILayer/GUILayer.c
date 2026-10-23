@@ -24,8 +24,8 @@
 
 void RGP_GuiInit(RGP_Window_t* ctxWindow)
 {
-    RGP_ASSERT(ctxWindow, "RGP GUI Init, the window ctx should not be NULL");
-    RGP_ASSERT(ctxWindow->native, "RGP GUI Init, the native window ctx should not be NULL");
+    RGP_ASSERT(ctxWindow, "The window ctx should not be NULL");
+    RGP_ASSERT(ctxWindow->native, "The native window ctx should not be NULL");
 
     ctxWindow->guiContext = nk_glfw3_init(
             (GLFWwindow*)ctxWindow->native, NK_GLFW3_INSTALL_CALLBACKS
@@ -51,6 +51,7 @@ void RGP_GuiBegin()
 
 void RGP_GuiEnd(RGP_Window_t* ctxWindow)
 {
+    //default example window
     enum {EASY, HARD};
         static int op = EASY;
         static float value = 0.6f;
@@ -78,6 +79,7 @@ void RGP_GuiEnd(RGP_Window_t* ctxWindow)
             nk_layout_row_end(ctxWindow->guiContext);
         }
         nk_end(ctxWindow->guiContext);
+    //----
 
     nk_glfw3_render(NK_ANTI_ALIASING_ON, MAX_VERTEX_BUFFER, MAX_ELEMENT_BUFFER);
 }

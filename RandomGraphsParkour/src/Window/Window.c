@@ -18,7 +18,7 @@ static void RGP_WindowCloseCallback(GLFWwindow* native)
     }
     else
     {
-        RGP_LOG_ERROR("Window event callback is NULL");
+        RGP_LOG_WARNING("Window event callback is NULL");
     }
 }
 
@@ -36,6 +36,7 @@ Bool RGP_WindowCreate(
         )
 {
     RGP_ASSERT(outWindow != NULL, "outWindow should not be NULL");
+    RGP_ASSERT(application != NULL, "application should not be NULL");
 
     memset(outWindow, 0, sizeof(RGP_Window_t));
 
