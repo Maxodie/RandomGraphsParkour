@@ -1,3 +1,6 @@
 [submodule "RandomGraphsParkour/vendors/nuklear/nuklear"]
 	path = RandomGraphsParkour/vendors/nuklear/nuklear
 	url = https://github.com/immediate-mode-ui/nuklear
+[submodule "RandomGraphsParkour/vendors/GLFW/glfw"]
+	path = RandomGraphsParkour/vendors/GLFW/glfw
+	url = https://github.com/glfw/glfw
