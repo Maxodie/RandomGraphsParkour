@@ -1,5 +1,15 @@
 # Random Graphs Parkour
 
+## Dependencies
+The project contains git submodules, the CMakeLists.txt should update them but if it does not just do
+``bash
+git submodule update --init --recursive --checkout
+``
+this project uses different external libs:
+* Glad (opengl 3.3)
+* [Glfw3](https://github.com/glfw/glfw)
+* [Nuklear](https://github.com/immediate-mode-ui/nuklear)
+
 ## Build
 To build on Linux you can use the build.sh file that uses the cmake preset.<br>
 The preset uses clang and C23.<br>
