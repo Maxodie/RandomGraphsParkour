@@ -35,13 +35,13 @@ void RGP_GuiInit(RGP_Window_t* ctxWindow)
 	nk_glfw3_font_stash_begin(&atlas);
 	nk_glfw3_font_stash_end();
 
-    RGP_LOG_DEBUG("GUI Initialized");
+    RGP_LOG_SUCCESS("GUI Initialized");
 }
 
 void RGP_GuiShutdown()
 {
     nk_glfw3_shutdown();
-    RGP_LOG_DEBUG("GUI shutdowned");
+    RGP_LOG_SUCCESS("GUI shutdowned");
 }
 
 void RGP_GuiBegin()

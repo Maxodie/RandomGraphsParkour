@@ -15,7 +15,7 @@ void RGP_AppInit(RGP_Application_t* app)
         return;
     }
 
-    RGP_LOG_DEBUG("Application initialized");
+    RGP_LOG_SUCCESS("Application initialized");
 
     if(!RGP_WindowCreate(&app->window, app, 840, 600, "RGP", RGP_AppHandleEvent))
     {
@@ -26,7 +26,7 @@ void RGP_AppInit(RGP_Application_t* app)
     RGP_GuiInit(&app->window);
 
     app->isRunning = 1;
-    RGP_LOG_DEBUG("Application started");
+    RGP_LOG_SUCCESS("Application started");
 }
 
 void RGP_AppShutdown(RGP_Application_t* app)
@@ -35,7 +35,7 @@ void RGP_AppShutdown(RGP_Application_t* app)
 
     RGP_WindowDestroy(&app->window);
 
-    RGP_LOG_DEBUG("Application shutdowned");
+    RGP_LOG_SUCCESS("Application shutdowned");
 }
 
 void RGP_AppHandleEvent(RGP_Application_t* app, RPG_WindowEventType eventType)
@@ -65,6 +65,6 @@ void RGP_AppRun(RGP_Application_t* app)
 
 void RGP_AppStop(RGP_Application_t* app)
 {
-    RGP_LOG_DEBUG("Application stopped");
+    RGP_LOG_SUCCESS("Application stopped");
     app->isRunning = 0;
 }

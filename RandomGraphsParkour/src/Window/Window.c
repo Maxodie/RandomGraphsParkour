@@ -70,7 +70,7 @@ Bool RGP_WindowCreate(
     const GLubyte * version = glGetString(GL_VERSION);
     RGP_LOG_DEBUG("OpenGL Version : %s", version);
 
-    RGP_LOG_DEBUG("Window created");
+    RGP_LOG_SUCCESS("Window created");
     return 1;
 }
 
@@ -82,7 +82,7 @@ void RGP_WindowDestroy(RGP_Window_t* window)
 	glfwDestroyWindow(window->native);
 	glfwTerminate();
 
-    RGP_LOG_DEBUG("Window destroyed");
+    RGP_LOG_SUCCESS("Window destroyed");
 }
 
 void RGP_WindowPoll()
