@@ -1,6 +1,7 @@
 #include "Application.h"
 #include "Log/Log.h"
 #include "GUILayer/GUILayer.h"
+#include "Graph/GraphLoop.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -14,8 +15,8 @@ void RGP_AppInit(RGP_Application_t* app)
         RGP_ASSERT(0, "API initialization failed");
         return;
     }
-
     RGP_LOG_SUCCESS("Application initialized");
+
 
     if(!RGP_WindowCreate(&app->window, app, 840, 600, "RGP", RGP_AppHandleEvent))
     {
@@ -23,6 +24,7 @@ void RGP_AppInit(RGP_Application_t* app)
         return;
     }
 
+    RGP_RendererInit(&app->rdrD);
     RGP_GuiInit(&app->window);
 
     app->isRunning = 1;
@@ -32,6 +34,8 @@ void RGP_AppInit(RGP_Application_t* app)
 void RGP_AppShutdown(RGP_Application_t* app)
 {
     RGP_GuiShutdown();
+
+    RGP_RendererShutdown(&app->rdrD);
 
     RGP_WindowDestroy(&app->window);
 
@@ -52,11 +56,11 @@ void RGP_AppRun(RGP_Application_t* app)
     {
         RGP_WindowPoll();
 
+        RGP_RendererClear(&app->rdrD);
+
+        RGP_EditorUpdate(app);
+
         RGP_GuiBegin();
-
-        glClear(GL_COLOR_BUFFER_BIT);
-        glClearColor(0.18f, 0.18f, 0.18f, 1.f);
-
         RGP_GuiEnd(&app->window);
 
         RGP_WindowSwapBuffers(&app->window);

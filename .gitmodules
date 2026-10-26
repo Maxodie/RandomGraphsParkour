@@ -4,3 +4,6 @@
 [submodule "RandomGraphsParkour/vendors/GLFW/glfw"]
 	path = RandomGraphsParkour/vendors/GLFW/glfw
 	url = https://github.com/glfw/glfw
+[submodule "RandomGraphsParkour/vendors/Mathilda/Mathilda"]
+	path = RandomGraphsParkour/vendors/Mathilda/Mathilda
+	url = https://github.com/Maxodie/Mathilda.git

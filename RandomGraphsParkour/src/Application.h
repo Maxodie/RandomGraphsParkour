@@ -1,10 +1,12 @@
 #pragma once
 #include "Window/Window.h"
+#include <Renderer/Renderer.h>
 
 struct RGP_Application_s
 {
-    Bool isRunning;
     RGP_Window_t window;
+    RGP_RendererData_t rdrD;
+    Bool isRunning;
 };
 
 void RGP_AppInit(RGP_Application_t* app);
