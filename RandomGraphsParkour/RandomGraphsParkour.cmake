@@ -18,6 +18,7 @@ add_executable(RandomGraphsParkour
     RandomGraphsParkour/src/Utils/List.h
     RandomGraphsParkour/src/Utils/List.c
 
+    RandomGraphsParkour/src/Graph/GraphData.h
     RandomGraphsParkour/src/Graph/GraphLoop.h
     RandomGraphsParkour/src/Graph/GraphLoop.c
 

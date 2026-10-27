@@ -18,6 +18,9 @@ typedef struct RGP_Application_s RGP_Application_t;
 typedef struct RGP_Window_s RGP_Window_t;
 typedef struct RGP_RendererData_s RGP_RendererData_t;
 typedef struct RGP_Vertex_s RGP_Vertex_t;
+typedef struct RGP_ListData_s RGP_ListData_t;
+
+typedef void (*WorkerCallback)(RGP_Application_t*, void*);
 
 #ifdef RGP_ASSERT_CORE
 #define RGP_ASSERT(x, msg)\

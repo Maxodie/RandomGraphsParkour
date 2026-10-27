@@ -31,7 +31,7 @@ static const ILDA_vector3f g_triangleVertexBufferData[] = {
     { 0.0f,  0.5f, 0.0f }
 };
 
-void LoadShaders(RGP_RendererData_t* rdrD, const char* vertexData, const char* fragmentData)
+void RGP_LoadShaders(RGP_RendererData_t* rdrD, const char* vertexData, const char* fragmentData)
 {
     RGP_ASSERT(rdrD != NULL,  "the given renderer data should not be NULL");
     RGP_ASSERT(vertexData != NULL,  "the given vertex data should not be NULL");
@@ -105,24 +105,39 @@ void LoadShaders(RGP_RendererData_t* rdrD, const char* vertexData, const char* f
     }
 }
 
+void RGP_BindArrayBufferElement(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, uint32_t offset)
+{
+    glEnableVertexAttribArray(index);
+    glVertexAttribPointer(
+            index,
+            size,
+            type,
+            normalized,
+            stride * sizeof(float),
+            (void*)(offset * sizeof(float))
+            );
+}
+
 void RGP_RendererInit(RGP_RendererData_t* rdrD)
 {
     RGP_ASSERT(rdrD != NULL,  "the given renderer data should not be NULL");
-    rdrD->vertexBuffer = RGP_ListInit(g_trianglebufferMaxSize, sizeof(RGP_Vertex_t));
-    rdrD->indexBuffer = RGP_ListInit(g_trianglebufferMaxSize, sizeof(uint32_t));
+    rdrD->vertexBuffer = RGP_ListInit(g_trianglebufferMaxSize, RGP_Vertex_t);
+    rdrD->indexBuffer = RGP_ListInit(g_trianglebufferMaxSize, uint32_t);
 
     glGenBuffers(1, &rdrD->vertexbufferID);
     glBindBuffer(GL_ARRAY_BUFFER, rdrD->vertexbufferID);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, rdrD->vertexBufferOffset * sizeof(RGP_Vertex_t), (const void*)rdrD->vertexBuffer);
-
-    glGenVertexArrays(1, &rdrD->VAO);
+    glBufferData(GL_ARRAY_BUFFER, g_trianglebufferMaxSize * sizeof(RGP_Vertex_t), (const void*)rdrD->vertexBuffer, GL_STATIC_DRAW);
 
     glGenBuffers(1, &rdrD->indexbufferID);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, rdrD->indexbufferID);
-    glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, rdrD->indexBufferOffset * sizeof(uint32_t), (const void*)rdrD->indexBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, g_trianglebufferMaxSize * sizeof(uint32_t), (const void*)rdrD->indexBuffer, GL_STATIC_DRAW);
 
+    glGenVertexArrays(1, &rdrD->VAO);
+    glBindVertexArray(rdrD->VAO);
+    RGP_BindArrayBufferElement(0, 3, GL_FLOAT, GL_FALSE, 6, 0);//position
+    RGP_BindArrayBufferElement(1, 3, GL_FLOAT, GL_FALSE, 6, 3);//color
 
-    LoadShaders(rdrD, vertexShaderData, fragmentShaderData);
+    RGP_LoadShaders(rdrD, vertexShaderData, fragmentShaderData);
 
     RGP_LOG_SUCCESS("Renderer initialized");
 }
@@ -181,38 +196,19 @@ void RGP_RendererDrawPoint(RGP_RendererData_t* rdrD, const ILDA_vector3f* positi
 
 void RGP_RendererDrawCall(RGP_RendererData_t* rdrD)
 {
+    //buffers
     glBindBuffer(GL_ARRAY_BUFFER, rdrD->vertexbufferID);
-    glBufferData(GL_ARRAY_BUFFER, rdrD->vertexBufferOffset * sizeof(RGP_Vertex_t), (const void*)rdrD->vertexBuffer, GL_STATIC_DRAW);
+    glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, rdrD->indexBufferOffset * sizeof(uint32_t), (const void*)rdrD->indexBuffer);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, rdrD->indexbufferID);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, rdrD->indexBufferOffset * sizeof(uint32_t), (const void*)rdrD->indexBuffer, GL_STATIC_DRAW);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, rdrD->vertexBufferOffset * sizeof(RGP_Vertex_t), (const void*)rdrD->vertexBuffer);
 
+    //shader
     glUseProgram(rdrD->programID);
 
-    glBindBuffer(GL_ARRAY_BUFFER, rdrD->vertexbufferID);
+    //draw call
     glBindVertexArray(rdrD->VAO);
-
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(
-            0,
-            3,
-            GL_FLOAT,
-            GL_FALSE,
-            6 * sizeof(float),
-            (void*)0
-            );
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(
-            1,
-            3,
-            GL_FLOAT,
-            GL_FALSE,
-            6 * sizeof(float),
-            (void*)(3 * sizeof(float))
-            );
-
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, rdrD->indexbufferID);
-
     glDrawElements(GL_TRIANGLES, rdrD->indexBufferOffset, GL_UNSIGNED_INT, (const void*)0);
 
     //clear state

@@ -2,7 +2,17 @@
 #include "Application.h"
 #include "Renderer/Renderer.h"
 
-void RGP_EditorUpdate(RGP_Application_t* app)
+void RGP_EditorInit(RGP_Application_t* app, RGP_EditorScene_t* scene)
+{
+    RGP_LOG_SUCCESS("Editor initialized");
+}
+
+void RGP_EditorShutdown(RGP_Application_t* app, RGP_EditorScene_t* scene)
+{
+    RGP_LOG_SUCCESS("Editor shutdowned");
+}
+
+void RGP_EditorUpdate(RGP_Application_t* app, RGP_EditorScene_t* scene)
 {
     RGP_RendererBegin(&app->rdrD);
 
