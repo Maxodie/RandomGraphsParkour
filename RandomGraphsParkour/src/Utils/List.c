@@ -19,10 +19,15 @@ void* RGP_ListInit_imp(size_t reserve, size_t typeSize)
     return data + sizeof(RGP_ListData_t);
 }
 
+void RGP_ListDelete_imp(void* list)
+{
+    RGP_ASSERT(list != NULL, "list should not be NULL");
+    free(list - sizeof(RGP_ListData_t));
+}
+
 void RGP_ListAddUb_imp(void** list)
 {
-    RGP_ASSERT(list != NULL, "default reserve size and list should not be NULL");
-    RGP_ASSERT(*list != NULL, "list should not be NULL");
+    RGP_ASSERT(list != NULL && *list, "given list should not be NULL");
     RGP_ListData_t* listData = *list - sizeof(RGP_ListData_t);
 
     if(listData->count >= listData->size)
@@ -50,8 +55,13 @@ void RGP_ListAddCpy_imp(void** list, const void* value)
     memcpy(*list + (listData->count - 1) * listData->dataSize, value, listData->dataSize);
 }
 
-void RGP_ListDelete_imp(void* list)
+void RGP_ListRemoveLast_imp(void* list)
 {
-    RGP_ASSERT(list != NULL, "list should not be NULL");
-    free(list - sizeof(RGP_ListData_t));
+    RGP_ASSERT(list != NULL, "given list should not be NULL");
+
+    RGP_ListData_t* listData = list - sizeof(RGP_ListData_t);
+    if(listData->count > 0)
+    {
+        --listData->count;
+    }
 }

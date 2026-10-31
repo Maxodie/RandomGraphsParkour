@@ -5,13 +5,19 @@ struct RGP_ThreadWork_s
 {
     RGP_RoutineFunc_t startRoutine;
     void* arg;
-    struct RGP_ThreadWork_s* next;
+
+    //scheduling
+    //isPending tells that the worker is doing nothing and can be used
+    Bool isPending;
+    //isProcessing tells the retreiver it has already be taken by a thread and it is currently running (so it's obviously not pending)
+    Bool isProcessing;
 };
 
 struct RGP_ThreadPool_s
 {
-    RGP_ThreadWork_t* workFirst;
-    RGP_ThreadWork_t* workLast;
+    RGP_ThreadWork_t* workList;
+    size_t workReadyCount;
+    size_t totalWorkPoolCount;
     pthread_mutex_t workMutex;
     pthread_cond_t  workCond;
     pthread_cond_t workingCond;
@@ -20,47 +26,27 @@ struct RGP_ThreadPool_s
     Bool isStarted;
 };
 
-static RGP_ThreadWork_t* RGP_ThreadWrokCreate(RGP_RoutineFunc_t routine, void* arg)
-{
-    RGP_ASSERT(routine != NULL, "routine must not be NULL");
-    RGP_ThreadWork_t* work;
-
-    //switch to list to have something contiguous
-    work = malloc(sizeof(RGP_ThreadWork_t));
-    work->startRoutine = routine;
-    work->arg = arg;
-    work->next = NULL;
-
-    return work;
-}
-
-static void RGP_ThreadWrokDestroy(RGP_ThreadWork_t* work)
-{
-    RGP_ASSERT(work != NULL, "work must not be NULL");
-
-    free(work);
-}
-
 static RGP_ThreadWork_t* RGP_ThreadWorkRetreive(RGP_ThreadPool_t* pool)
 {
     RGP_ASSERT(pool != NULL, "pool must not be NULL");
 
-    RGP_ThreadWork_t* work = pool->workFirst;
-
-    if(work == NULL)
+    if(pool->workReadyCount == 0)
     {
         return NULL;
     }
 
-    if(work->next == NULL)
+    RGP_ThreadWork_t* work = NULL;
+    for(size_t i = 0; i < pool->totalWorkPoolCount; ++i)
     {
-        pool->workFirst = NULL;
-        pool->workLast = NULL;
+        work = &pool->workList[i];
+        if(!work->isProcessing && !work->isPending)
+        {
+            work->isProcessing = 1;
+            break;
+        }
+        RGP_ASSERT(pool->totalWorkPoolCount - 1 != i, "no available work found but workReadyCount says it exists");
     }
-    else
-    {
-        pool->workFirst = work->next;
-    }
+    --pool->workReadyCount;
 
     return work;
 }
@@ -75,7 +61,7 @@ static void* RGP_ThreadWorker(void* arg)
     {
         pthread_mutex_lock(&pool->workMutex);
 
-        while(pool->workFirst == NULL && pool->isStarted)
+        while(pool->workReadyCount == 0 && pool->isStarted)
         {
             pthread_cond_wait(&pool->workCond, &pool->workMutex);
         }
@@ -92,12 +78,13 @@ static void* RGP_ThreadWorker(void* arg)
         if(work != NULL)
         {
             work->startRoutine(work->arg);
-            RGP_ThreadWrokDestroy(work);
+            work->isPending = 1;
+            work->isProcessing = 0;
         }
 
         pthread_mutex_lock(&pool->workMutex);
         --pool->workingCount;
-        if(pool->isStarted && pool->workingCount == 0 && pool->workFirst == NULL)
+        if(pool->isStarted && pool->workingCount == 0 && pool->workReadyCount == 0)
         {
             pthread_cond_signal(&pool->workingCond);
         }
@@ -115,23 +102,31 @@ Bool RGP_ThreadAddWork(RGP_ThreadPool_t* pool, RGP_RoutineFunc_t routine, void* 
 {
     RGP_ASSERT(pool != NULL && routine != NULL, "pool and routine must not be NULL");
 
-    RGP_ThreadWork_t* work = RGP_ThreadWrokCreate(routine, arg);
-    if(work == NULL)
+    pthread_mutex_lock(&pool->workMutex);
+
+    RGP_ThreadWork_t* work = NULL;
+    for(size_t i = 0; i < pool->totalWorkPoolCount; ++i)
     {
-        return 0;
+        RGP_ThreadWork_t* searched = &pool->workList[i];
+        if(searched->isPending)
+        {
+            work = searched;
+            break;
+        }
     }
 
-    pthread_mutex_lock(&pool->workMutex);
-    if(pool->workFirst == NULL)
+    if(work == NULL)
     {
-        pool->workFirst = work;
-        pool->workLast = pool->workFirst;
+        RGP_ListAddUb(pool->workList);
+        work = &pool->workList[pool->totalWorkPoolCount];
+        pool->totalWorkPoolCount++;
     }
-    else
-    {
-        pool->workLast->next = work;
-        pool->workLast = work;
-    }
+
+    work->arg = arg;
+    work->startRoutine = routine;
+    work->isPending = 0;
+    work->isProcessing = 0;
+    ++pool->workReadyCount;
 
     pthread_cond_broadcast(&pool->workCond);
     pthread_mutex_unlock(&pool->workMutex);
@@ -144,7 +139,7 @@ void RGP_ThreadWait(RGP_ThreadPool_t* pool)
     pthread_mutex_lock(&pool->workMutex);
     while(1)
     {
-        if(pool->workFirst != NULL || (pool->isStarted && pool->workingCount != 0) || (!pool->isStarted && pool->threadCount != 0))
+        if(pool->workReadyCount > 0 || (pool->isStarted && pool->workingCount != 0) || (!pool->isStarted && pool->threadCount != 0))
         {
             pthread_cond_wait(&pool->workingCond, &pool->workMutex);
         }
@@ -169,8 +164,7 @@ RGP_ThreadPool_t* RGP_ThreadCreate(size_t amount)
     pthread_cond_init(&pool->workCond, NULL);
     pthread_cond_init(&pool->workingCond, NULL);
 
-    pool->workFirst = NULL;
-    pool->workLast = NULL;
+    pool->workList = RGP_ListInit(amount, RGP_ThreadWork_t);
     pool->isStarted = 1;
 
     for(size_t i = 0; i < amount; ++i)
@@ -188,21 +182,12 @@ void RGP_ThreadDestroy(RGP_ThreadPool_t* pool)
 {
     RGP_ASSERT(pool != NULL, "pool should not be NULL");
 
-    RGP_ThreadWork_t* work;
     RGP_ThreadWork_t* workNext;
 
     pthread_mutex_lock(&pool->workMutex);
-    work = pool->workFirst;
     pool->isStarted = 0;
 
-    while(work != NULL)
-    {
-        workNext = work->next;
-        RGP_ThreadWrokDestroy(work);
-        work = workNext;
-    }
-
-    pool->workFirst = NULL;
+    RGP_ListDelete(pool->workList);
     pthread_cond_broadcast(&pool->workCond);
     pthread_mutex_unlock(&pool->workMutex);
 

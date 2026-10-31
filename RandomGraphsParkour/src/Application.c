@@ -1,5 +1,4 @@
 #include "Application.h"
-#include "Log/Log.h"
 #include "GUILayer/GUILayer.h"
 #include "Graph/GraphLoop.h"
 #include "Utils/ThreadPool.h"
