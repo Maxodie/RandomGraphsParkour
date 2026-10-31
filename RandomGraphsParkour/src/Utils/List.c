@@ -47,7 +47,7 @@ void RGP_ListAddCpy_imp(void** list, const void* value)
     RGP_ListAddUb_imp(list);
 
     RGP_ListData_t* listData = *list - sizeof(RGP_ListData_t);
-    memcpy(*list + (listData->count - 1), value, listData->dataSize);
+    memcpy(*list + (listData->count - 1) * listData->dataSize, value, listData->dataSize);
 }
 
 void RGP_ListDelete_imp(void* list)

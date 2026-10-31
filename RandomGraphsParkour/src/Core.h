@@ -9,8 +9,6 @@
 #include <time.h>
 #include <malloc.h>
 
-#include "Log/Log.h"
-#include "Utils/List.h"
 #include <ILDA_vector/ILDA_vector.h>
 
 typedef char Bool;
@@ -20,7 +18,7 @@ typedef struct RGP_RendererData_s RGP_RendererData_t;
 typedef struct RGP_Vertex_s RGP_Vertex_t;
 typedef struct RGP_ListData_s RGP_ListData_t;
 
-typedef void (*WorkerCallback)(RGP_Application_t*, void*);
+typedef void (*RGP_RoutineFunc_t)(void*);
 
 #ifdef RGP_ASSERT_CORE
 #define RGP_ASSERT(x, msg)\
@@ -34,3 +32,7 @@ typedef void (*WorkerCallback)(RGP_Application_t*, void*);
 #else
 #define RGP_ASSERT(x, msg)
 #endif
+
+#include "Log/Log.h"
+#include "Utils/List.h"
+#include "Utils/ThreadPool.h"

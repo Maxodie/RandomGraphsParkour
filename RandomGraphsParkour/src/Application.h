@@ -1,12 +1,13 @@
 #pragma once
+#include "Core.h"
 #include "Window/Window.h"
 #include <Renderer/Renderer.h>
 
 typedef struct RGP_ApplicationWorker_s
 {
-    WorkerCallback InitCallback;
-    WorkerCallback UpdateCallback;
-    WorkerCallback ShutdownCallback;
+    RGP_RoutineFunc_t InitCallback;
+    RGP_RoutineFunc_t UpdateCallback;
+    RGP_RoutineFunc_t ShutdownCallback;
     void* data;
 } RGP_ApplicationWorker_t;
 
@@ -17,6 +18,8 @@ struct RGP_Application_s
 
     RGP_ApplicationWorker_t* workerList;
     size_t workerCount;
+
+    RGP_ThreadPool_t* threadPool;
 
     Bool isRunning;
 };

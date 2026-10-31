@@ -2,6 +2,7 @@
 #include "Log/Log.h"
 #include "GUILayer/GUILayer.h"
 #include "Graph/GraphLoop.h"
+#include "Utils/ThreadPool.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -27,6 +28,8 @@ void RGP_AppInit(RGP_Application_t* app)
     RGP_RendererInit(&app->rdrD);
     RGP_GuiInit(&app->window);
 
+    app->threadPool = RGP_ThreadCreate(RGP_ThreadMaxAmount());
+
     RGP_AppInitWorkerList(app);
 
     app->isRunning = 1;
@@ -36,6 +39,8 @@ void RGP_AppShutdown(RGP_Application_t* app)
 {
     RGP_ASSERT(app != NULL, "app should not be NULL");
     RGP_AppShutdownWorkerList(app);
+
+    RGP_ThreadDestroy(app->threadPool);
 
     RGP_GuiShutdown();
 
@@ -71,9 +76,9 @@ void RGP_AppAddWorker(RGP_Application_t* app, const RGP_ApplicationWorker_t* wor
     RGP_ListAddCpy(app->workerList, worker);
     ++app->workerCount;
 
-    if(worker->ShutdownCallback)
+    if(worker->InitCallback)
     {
-        worker->InitCallback(app, worker->data); //needs to be last in case of recursive additional worker
+        worker->InitCallback(worker->data); //needs to be last in case of recursive additional worker
     }
 }
 
@@ -86,7 +91,7 @@ void RGP_AppShutdownWorkerList(RGP_Application_t* app)
         RGP_ApplicationWorker_t* worker = &app->workerList[i];
         if(worker->ShutdownCallback)
         {
-            worker->ShutdownCallback(app, worker->data);
+            worker->ShutdownCallback(worker->data);
         }
     }
 
@@ -104,17 +109,21 @@ void RGP_AppRun(RGP_Application_t* app)
         RGP_WindowPoll();
 
         RGP_RendererClear(&app->rdrD);
+        RGP_GuiBegin();
 
         for(size_t i = 0; i < app->workerCount; ++i)
         {
             RGP_ApplicationWorker_t* worker = &app->workerList[i];
             if(worker->UpdateCallback)
             {
-                worker->UpdateCallback(app, worker->data);
+                //rework the work queue to it a pool, and beeing able to choose between update loop and one time
+                RGP_ThreadAddWork(app->threadPool, (RGP_RoutineFunc_t)worker->UpdateCallback, worker->data);
             }
         }
 
-        RGP_GuiBegin();
+        RGP_ThreadWait(app->threadPool);
+
+        RGP_RendererEnd(&app->rdrD);
         RGP_GuiEnd(&app->window);
 
         RGP_WindowSwapBuffers(&app->window);
