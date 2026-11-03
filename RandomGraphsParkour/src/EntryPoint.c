@@ -11,23 +11,14 @@ int main(int argc, char** argv)
     graphScene.app = &app;
     RGP_ApplicationWorker_t applicationWorker =
     {
-        .InitCallback = (RGP_RoutineFunc_t)RGP_EditorInit,
-        .UpdateCallback = (RGP_RoutineFunc_t)RGP_EditorUpdate,
-        .ShutdownCallback = (RGP_RoutineFunc_t)RGP_EditorShutdown,
+        .initCallback = (RGP_RoutineFunc_t)RGP_EditorInit,
+        .updateCallback = (RGP_RoutineFunc_t)RGP_EditorUpdate,
+        .shutdownCallback = (RGP_RoutineFunc_t)RGP_EditorShutdown,
         .data = &graphScene,
+        .needsThread = 0
     };
 
     RGP_AppAddWorker(&app, &applicationWorker);
-
-    RGP_ApplicationWorker_t applicationWorkerGUI =
-    {
-        .InitCallback = NULL,
-        .UpdateCallback = (RGP_RoutineFunc_t)RGP_EditorUpdateGUI,
-        .ShutdownCallback = NULL,
-        .data = &graphScene,
-    };
-    RGP_AppAddWorker(&app, &applicationWorkerGUI);
-
 
     RGP_AppRun(&app);
     RGP_AppShutdown(&app);

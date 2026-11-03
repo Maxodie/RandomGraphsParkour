@@ -15,6 +15,7 @@ struct RGP_ListData_s
 #define RGP_ListAddUb(list) RGP_ListAddUb_imp((void**)&list)
 
 #define RGP_ListRemoveLast(list) RGP_ListRemoveLast_imp((void*)list)
+#define RGP_ListClear(list) RGP_ListClear_imp((void*)list)
 
 #define RGP_ListGetCount(list) ((RGP_ListData_t*)((uintptr_t)list - sizeof(RGP_ListData_t)))->count
 
@@ -25,4 +26,5 @@ void RGP_ListAddUb_imp(void** list);
 void RGP_ListAddCpy_imp(void** list, const void* value);
 
 //must not shrink array
+void RGP_ListClear_imp(void* list);
 void RGP_ListRemoveLast_imp(void* list);

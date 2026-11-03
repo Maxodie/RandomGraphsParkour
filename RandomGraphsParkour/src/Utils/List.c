@@ -55,6 +55,14 @@ void RGP_ListAddCpy_imp(void** list, const void* value)
     memcpy(*list + (listData->count - 1) * listData->dataSize, value, listData->dataSize);
 }
 
+void RGP_ListClear_imp(void* list)
+{
+    RGP_ASSERT(list != NULL, "given list should not be NULL");
+
+    RGP_ListData_t* listData = list - sizeof(RGP_ListData_t);
+    listData->count = 0;
+}
+
 void RGP_ListRemoveLast_imp(void* list)
 {
     RGP_ASSERT(list != NULL, "given list should not be NULL");

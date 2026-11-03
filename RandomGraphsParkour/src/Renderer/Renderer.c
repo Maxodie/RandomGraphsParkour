@@ -1,5 +1,6 @@
 #include "Renderer/Renderer.h"
 #include "Core.h"
+#include "Window/Window.h"
 #include "Renderer/Vertex.h"
 
 #include <glad/glad.h>
@@ -23,7 +24,10 @@ static const char* fragmentShaderData =
 "}";
 
 static const uint32_t g_triangleVertexAmount = 3;
-static const size_t g_trianglebufferMaxSize = g_triangleVertexAmount * 512;
+static const uint32_t g_triangleIndexAmount = 3;
+static const uint32_t g_quadVertexAmount = 4;
+static const uint32_t g_quadIndexAmount = 6;
+static const size_t g_vertexbufferMaxSize = g_triangleVertexAmount * 512;
 
 static const ILDA_vector3f g_triangleVertexBufferData[] = {
     { -0.5f, -0.5f, 0.0f },
@@ -31,7 +35,14 @@ static const ILDA_vector3f g_triangleVertexBufferData[] = {
     { 0.0f,  0.5f, 0.0f }
 };
 
-void RGP_LoadShaders(RGP_RendererData_t* rdrD, const char* vertexData, const char* fragmentData)
+static const ILDA_vector3f g_quadVertexBufferData[] = {
+    { -0.5f, -0.5f, 0.0f },
+    {  0.5f, -0.5f, 0.0f },
+    { -0.5f,  0.5f, 0.0f },
+    { 0.5f,  0.5f, 0.0f },
+};
+
+static void RGP_LoadShaders(RGP_RendererData_t* rdrD, const char* vertexData, const char* fragmentData)
 {
     RGP_ASSERT(rdrD != NULL,  "the given renderer data should not be NULL");
     RGP_ASSERT(vertexData != NULL,  "the given vertex data should not be NULL");
@@ -105,7 +116,7 @@ void RGP_LoadShaders(RGP_RendererData_t* rdrD, const char* vertexData, const cha
     }
 }
 
-void RGP_BindArrayBufferElement(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, uint32_t offset)
+static void RGP_BindArrayBufferElement(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, uint32_t offset)
 {
     glEnableVertexAttribArray(index);
     glVertexAttribPointer(
@@ -118,19 +129,20 @@ void RGP_BindArrayBufferElement(GLuint index, GLint size, GLenum type, GLboolean
             );
 }
 
-void RGP_RendererInit(RGP_RendererData_t* rdrD)
+void RGP_RendererInit(RGP_RendererData_t* rdrD, RGP_Window_t* window)
 {
-    RGP_ASSERT(rdrD != NULL,  "the given renderer data should not be NULL");
-    rdrD->vertexBuffer = RGP_ListInit(g_trianglebufferMaxSize, RGP_Vertex_t);
-    rdrD->indexBuffer = RGP_ListInit(g_trianglebufferMaxSize, uint32_t);
+    RGP_ASSERT(rdrD != NULL && window != NULL,  "the given renderer data and window should not be NULL");
+    rdrD->window = window;
+    rdrD->vertexBuffer = RGP_ListInit(g_vertexbufferMaxSize, RGP_Vertex_t);
+    rdrD->indexBuffer = RGP_ListInit(g_vertexbufferMaxSize, uint32_t);
 
     glGenBuffers(1, &rdrD->vertexbufferID);
     glBindBuffer(GL_ARRAY_BUFFER, rdrD->vertexbufferID);
-    glBufferData(GL_ARRAY_BUFFER, g_trianglebufferMaxSize * sizeof(RGP_Vertex_t), (const void*)rdrD->vertexBuffer, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, g_vertexbufferMaxSize * sizeof(RGP_Vertex_t), (const void*)rdrD->vertexBuffer, GL_STATIC_DRAW);
 
     glGenBuffers(1, &rdrD->indexbufferID);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, rdrD->indexbufferID);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, g_trianglebufferMaxSize * sizeof(uint32_t), (const void*)rdrD->indexBuffer, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, g_vertexbufferMaxSize * sizeof(uint32_t), (const void*)rdrD->indexBuffer, GL_STATIC_DRAW);
 
     glGenVertexArrays(1, &rdrD->VAO);
     glBindVertexArray(rdrD->VAO);
@@ -166,12 +178,12 @@ void RGP_RendererClear(RGP_RendererData_t* rdrD)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(0.18f, 0.18f, 0.38f, 1.f);
 
-    glViewport(0,0,(GLsizei)840,(GLsizei)600);
+    glViewport(0,0,(GLsizei)rdrD->window->width, (GLsizei)rdrD->window->height);
 }
 
-void RGP_RendererDrawPoint(RGP_RendererData_t* rdrD, const ILDA_vector3f* position, const ILDA_vector3f* color)
+void RGP_RendererDrawPoint(RGP_RendererData_t* rdrD, const ILDA_vector3f* position, const ILDA_vector3f* color, float size)
 {
-    if(rdrD->vertexBufferOffset + g_triangleVertexAmount >= g_trianglebufferMaxSize)
+    if(rdrD->vertexBufferOffset + g_triangleVertexAmount >= g_vertexbufferMaxSize || rdrD->indexBufferOffset + g_triangleIndexAmount >= g_vertexbufferMaxSize)
     {
         RGP_RendererDrawCall(rdrD);
     }
@@ -180,6 +192,7 @@ void RGP_RendererDrawPoint(RGP_RendererData_t* rdrD, const ILDA_vector3f* positi
     for(int i = 0; i < g_triangleVertexAmount; ++i)
     {
         ILDA_vector3f_copy(&finalPos, &g_triangleVertexBufferData[i]);
+        ILDA_vector3f_mul(&finalPos, size);
         ILDA_vector3f_add(&finalPos, position);
         rdrD->vertexBuffer[rdrD->vertexBufferOffset].position = finalPos;
         rdrD->vertexBuffer[rdrD->vertexBufferOffset].color = *color;
@@ -187,11 +200,72 @@ void RGP_RendererDrawPoint(RGP_RendererData_t* rdrD, const ILDA_vector3f* positi
     }
 
     size_t index = rdrD->indexBufferOffset;
-    rdrD->indexBuffer[index] = rdrD->indexBufferOffset;
-    rdrD->indexBuffer[++index] = rdrD->indexBufferOffset + 1;
-    rdrD->indexBuffer[++index] = rdrD->indexBufferOffset + 2;
+    rdrD->indexBuffer[index] = rdrD->currentIndexOffset;
+    rdrD->indexBuffer[++index] = rdrD->currentIndexOffset + 1;
+    rdrD->indexBuffer[++index] = rdrD->currentIndexOffset + 2;
 
-    rdrD->indexBufferOffset += 3;
+    rdrD->currentIndexOffset += g_triangleVertexAmount;
+    rdrD->indexBufferOffset += g_triangleIndexAmount;
+}
+
+void RGP_RendererDrawLine(RGP_RendererData_t* rdrD, const ILDA_vector3f* position1, const ILDA_vector3f* position2, const ILDA_vector3f* color, float width)
+{
+    if(rdrD->vertexBufferOffset + g_quadVertexAmount >= g_vertexbufferMaxSize || rdrD->indexBufferOffset + g_quadIndexAmount >= g_vertexbufferMaxSize)
+    {
+        RGP_RendererDrawCall(rdrD);
+    }
+
+    ILDA_vector3f dir = *position2;
+    ILDA_vector3f_sub(&dir, position1);
+    dir = ILDA_vector3f_normalize(&dir);
+
+    // ILDA_vector3f dir2 = { -dir.x, -dir.y, 0.0f }; //dir2 is used to avoid stating the line at 0
+    // dir2 = ILDA_vector3f_normalize(&dir2);
+
+    ILDA_vector3f normal = { -dir.y, dir.x, 0 };
+    ILDA_vector3f_mul(&normal, width * 0.5f);
+
+    // ILDA_vector3f_mul(&dir, width * 0.5f);
+    // ILDA_vector3f_mul(&dir2, width * 0.5f);
+
+    ILDA_vector3f linePositions[g_quadVertexAmount];
+    linePositions[0].x = -normal.x;
+    linePositions[0].y = -normal.y;
+    ILDA_vector3f_add(&linePositions[0], position1);
+    // ILDA_vector3f_add(&linePositions[0], &dir2);
+
+    linePositions[1].x = -normal.x;
+    linePositions[1].y = -normal.y;
+    ILDA_vector3f_add(&linePositions[1], position2);
+    // ILDA_vector3f_add(&linePositions[1], &dir);
+
+    linePositions[2].x = normal.x;
+    linePositions[2].y = normal.y;
+    ILDA_vector3f_add(&linePositions[2], position1);
+    // ILDA_vector3f_add(&linePositions[2], &dir2);
+
+    linePositions[3].x = normal.x;
+    linePositions[3].y = normal.y;
+    ILDA_vector3f_add(&linePositions[3], position2);
+    // ILDA_vector3f_add(&linePositions[3], &dir);
+
+    for(int i = 0; i < g_quadVertexAmount; ++i)
+    {
+        rdrD->vertexBuffer[rdrD->vertexBufferOffset].position = linePositions[i];
+        rdrD->vertexBuffer[rdrD->vertexBufferOffset].color = *color;
+        ++rdrD->vertexBufferOffset;
+    }
+
+    size_t index = rdrD->indexBufferOffset;
+    rdrD->indexBuffer[index] = rdrD->currentIndexOffset + 2;
+    rdrD->indexBuffer[++index] = rdrD->currentIndexOffset;
+    rdrD->indexBuffer[++index] = rdrD->currentIndexOffset + 3;
+    rdrD->indexBuffer[++index] = rdrD->currentIndexOffset + 3;
+    rdrD->indexBuffer[++index] = rdrD->currentIndexOffset + 1;
+    rdrD->indexBuffer[++index] = rdrD->currentIndexOffset;
+
+    rdrD->currentIndexOffset += g_quadVertexAmount;
+    rdrD->indexBufferOffset += g_quadIndexAmount;
 }
 
 void RGP_RendererDrawCall(RGP_RendererData_t* rdrD)
@@ -209,6 +283,7 @@ void RGP_RendererDrawCall(RGP_RendererData_t* rdrD)
     //draw call
     glBindVertexArray(rdrD->VAO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, rdrD->indexbufferID);
+
     glDrawElements(GL_TRIANGLES, rdrD->indexBufferOffset, GL_UNSIGNED_INT, (const void*)0);
 
     //clear state
@@ -235,4 +310,5 @@ void RGP_RendererFlush(RGP_RendererData_t* rdrD)
 {
     rdrD->vertexBufferOffset = 0;
     rdrD->indexBufferOffset = 0;
+    rdrD->currentIndexOffset = 0;
 }
