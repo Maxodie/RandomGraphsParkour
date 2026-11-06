@@ -1,6 +1,7 @@
 #include "Graph/GraphLoop.h"
 #include "GUILayer/GUILayer.h"
 #include "Application.h"
+#include "Renderer/Camera.h"
 #include "Renderer/Renderer.h"
 
 #include <nuklear.h>
@@ -13,6 +14,10 @@ void RGP_EditorInit(RGP_EditorScene_t* scene)
     scene->isRunning = 1;
     scene->graphPoints = RGP_ListInit(16, RGP_GraphPoint_t);
     scene->pointCount = 0;
+
+    RGP_CameraInit(&scene->cam, -1.f, 10.f, scene->app->window.width, scene->app->window.height);
+    ILDA_vector3f position = (ILDA_vector3f){ 0.0f, 0.0f, -1.0f };
+    RGP_CameraUpdatePosition(&scene->cam, &position);
 
     RGP_ApplicationWorker_t applicationWorkerGUI =
     {
@@ -29,6 +34,7 @@ void RGP_EditorInit(RGP_EditorScene_t* scene)
 
 void RGP_EditorShutdown(RGP_EditorScene_t* scene)
 {
+    RGP_CameraShutdown(&scene->cam);
     RGP_ListDelete(scene->graphPoints);
 
     RGP_LOG_SUCCESS("Editor shutdowned");
@@ -41,22 +47,22 @@ void RGP_EditorUpdate(RGP_EditorScene_t* scene)
     ILDA_vector3f color1 = {1.f, 0.0f, 0.5f};
     ILDA_vector3f color2 = {0.0f, 0.0f, 1.0f};
 
-    RGP_RendererBegin(&app->rdrD);
+    RGP_RendererBegin(&app->rdrD, &scene->cam);
 
     for(size_t i = 1; i < scene->pointCount; ++i)
     {
-        RGP_RendererDrawLine(&app->rdrD, &scene->graphPoints[i - 1].position, &scene->graphPoints[i].position, &color2, 0.01f);
+        RGP_RendererDrawLine(&app->rdrD, &scene->graphPoints[i - 1].position, &scene->graphPoints[i].position, &color2, 0.01f, 1);
     }
 
-    // RGP_RendererEnd(&app->rdrD);
-    // RGP_RendererBegin(&app->rdrD);
+    // RGP_RendererEnd(&app->rdrD, 1);
+    // RGP_RendererBegin(&app->rdrD, &scene->cam);
 
     for(size_t i = 0; i < scene->pointCount; ++i)
     {
         RGP_RendererDrawPoint(&app->rdrD, &scene->graphPoints[i].position, &scene->graphPoints[i].color, 0.1f);
     }
 
-    RGP_RendererEnd(&app->rdrD);
+    RGP_RendererEnd(&app->rdrD, 0);
 
     // ILDA_vector3f location1 = {0.5f, 0.5f, 0.5f};
     // RGP_RendererDrawPoint(&app->rdrD, &location1, &color1);
@@ -81,6 +87,7 @@ void RGP_EditorUpdateGUI(RGP_EditorScene_t* scene)
         /* fixed widget pixel width */
         nk_layout_row_static(ctxWindow->guiContext, 30, 80, 1);
         if (nk_button_label(ctxWindow->guiContext, "spawn point")) {
+            // RGP_GraphPoint_t graphPoint = {.position = {value2, value, 0.0f}, .color = {0.0f, 0.0f, 0.0f}};
             RGP_GraphPoint_t graphPoint = {.position = {value2, value, 0.0f}, .color = {0.0f, 0.0f, 0.0f}};
             if(op == RED)
             {

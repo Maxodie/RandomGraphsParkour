@@ -9,9 +9,11 @@ static const char* vertexShaderData =
 "#version 330 core\n"
 "layout(location = 0) in vec3 pos;\n"
 "layout(location = 1) in vec3 color;\n"
+"uniform mat4 projection;\n"
+"uniform mat4 view;\n"
 "out vec3 outColor;\n"
 "void main(){\n"
-"    gl_Position = vec4(pos, 1.f); \n"
+"    gl_Position =  view *projection * vec4(pos, 1.f); \n"
 "    outColor = color; \n"
  "}";
 
@@ -27,7 +29,7 @@ static const uint32_t g_triangleVertexAmount = 3;
 static const uint32_t g_triangleIndexAmount = 3;
 static const uint32_t g_quadVertexAmount = 4;
 static const uint32_t g_quadIndexAmount = 6;
-static const size_t g_vertexbufferMaxSize = g_triangleVertexAmount * 512;
+static const size_t g_vertexbufferMaxSize = g_quadVertexAmount * 512;
 
 static const ILDA_vector3f g_triangleVertexBufferData[] = {
     { -0.5f, -0.5f, 0.0f },
@@ -133,8 +135,12 @@ void RGP_RendererInit(RGP_RendererData_t* rdrD, RGP_Window_t* window)
 {
     RGP_ASSERT(rdrD != NULL && window != NULL,  "the given renderer data and window should not be NULL");
     rdrD->window = window;
-    rdrD->vertexBuffer = RGP_ListInit(g_vertexbufferMaxSize, RGP_Vertex_t);
+    rdrD->vertexBuffer = RGP_ListInit(g_vertexbufferMaxSize, *rdrD->vertexBuffer);
     rdrD->indexBuffer = RGP_ListInit(g_vertexbufferMaxSize, uint32_t);
+
+    rdrD->currentIndexOffset = 0;
+    rdrD->vertexBufferOffset = 0;
+    rdrD->indexBufferOffset = 0;
 
     glGenBuffers(1, &rdrD->vertexbufferID);
     glBindBuffer(GL_ARRAY_BUFFER, rdrD->vertexbufferID);
@@ -185,7 +191,7 @@ void RGP_RendererDrawPoint(RGP_RendererData_t* rdrD, const ILDA_vector3f* positi
 {
     if(rdrD->vertexBufferOffset + g_triangleVertexAmount >= g_vertexbufferMaxSize || rdrD->indexBufferOffset + g_triangleIndexAmount >= g_vertexbufferMaxSize)
     {
-        RGP_RendererDrawCall(rdrD);
+        RGP_RendererDrawCall(rdrD, rdrD->cachedShowPoints);
     }
 
     ILDA_vector3f finalPos;
@@ -208,48 +214,39 @@ void RGP_RendererDrawPoint(RGP_RendererData_t* rdrD, const ILDA_vector3f* positi
     rdrD->indexBufferOffset += g_triangleIndexAmount;
 }
 
-void RGP_RendererDrawLine(RGP_RendererData_t* rdrD, const ILDA_vector3f* position1, const ILDA_vector3f* position2, const ILDA_vector3f* color, float width)
+void RGP_RendererDrawLine(RGP_RendererData_t* rdrD, const ILDA_vector3f* position1, const ILDA_vector3f* position2, const ILDA_vector3f* color, float width, Bool isDirected)
 {
     if(rdrD->vertexBufferOffset + g_quadVertexAmount >= g_vertexbufferMaxSize || rdrD->indexBufferOffset + g_quadIndexAmount >= g_vertexbufferMaxSize)
     {
-        RGP_RendererDrawCall(rdrD);
+        RGP_RendererDrawCall(rdrD, rdrD->cachedShowPoints);
     }
 
     ILDA_vector3f dir = *position2;
     ILDA_vector3f_sub(&dir, position1);
     dir = ILDA_vector3f_normalize(&dir);
 
-    // ILDA_vector3f dir2 = { -dir.x, -dir.y, 0.0f }; //dir2 is used to avoid stating the line at 0
-    // dir2 = ILDA_vector3f_normalize(&dir2);
-
     ILDA_vector3f normal = { -dir.y, dir.x, 0 };
     ILDA_vector3f_mul(&normal, width * 0.5f);
 
-    // ILDA_vector3f_mul(&dir, width * 0.5f);
-    // ILDA_vector3f_mul(&dir2, width * 0.5f);
-
     ILDA_vector3f linePositions[g_quadVertexAmount];
+    memset(linePositions, 0.0f, sizeof(linePositions));
     linePositions[0].x = -normal.x;
     linePositions[0].y = -normal.y;
     ILDA_vector3f_add(&linePositions[0], position1);
-    // ILDA_vector3f_add(&linePositions[0], &dir2);
 
     linePositions[1].x = -normal.x;
     linePositions[1].y = -normal.y;
     ILDA_vector3f_add(&linePositions[1], position2);
-    // ILDA_vector3f_add(&linePositions[1], &dir);
 
     linePositions[2].x = normal.x;
     linePositions[2].y = normal.y;
     ILDA_vector3f_add(&linePositions[2], position1);
-    // ILDA_vector3f_add(&linePositions[2], &dir2);
 
     linePositions[3].x = normal.x;
     linePositions[3].y = normal.y;
     ILDA_vector3f_add(&linePositions[3], position2);
-    // ILDA_vector3f_add(&linePositions[3], &dir);
 
-    for(int i = 0; i < g_quadVertexAmount; ++i)
+    for(uint32_t i = 0; i < g_quadVertexAmount; ++i)
     {
         rdrD->vertexBuffer[rdrD->vertexBufferOffset].position = linePositions[i];
         rdrD->vertexBuffer[rdrD->vertexBufferOffset].color = *color;
@@ -266,9 +263,30 @@ void RGP_RendererDrawLine(RGP_RendererData_t* rdrD, const ILDA_vector3f* positio
 
     rdrD->currentIndexOffset += g_quadVertexAmount;
     rdrD->indexBufferOffset += g_quadIndexAmount;
+
+    if(isDirected)
+    {
+        ILDA_vector3f arrow1 = arrow1 = ILDA_vector3f_lerp(position1, position2, 0.5f);
+
+        ILDA_vector3f distance = *position2;
+        ILDA_vector3f_sub(&distance, position1);
+        float length = ILDA_vector3f_length(&distance);
+
+        float arrowLerpLength = 0.5f - width * 3.0f / length;
+        ILDA_vector3f arrow2 = ILDA_vector3f_lerp(position1, position2, arrowLerpLength);
+        arrow2.x += normal.x * 5;
+        arrow2.y += normal.y * 5;
+
+        ILDA_vector3f arrow3 = ILDA_vector3f_lerp(position1, position2, arrowLerpLength);
+        arrow3.x -= normal.x * 5;
+        arrow3.y -= normal.y * 5;
+
+        RGP_RendererDrawLine(rdrD, &arrow1, &arrow2, color, width, 0);
+        RGP_RendererDrawLine(rdrD, &arrow1, &arrow3, color, width, 0);
+    }
 }
 
-void RGP_RendererDrawCall(RGP_RendererData_t* rdrD)
+void RGP_RendererDrawCall(RGP_RendererData_t* rdrD, Bool showPoints)
 {
     //buffers
     glBindBuffer(GL_ARRAY_BUFFER, rdrD->vertexbufferID);
@@ -286,6 +304,12 @@ void RGP_RendererDrawCall(RGP_RendererData_t* rdrD)
 
     glDrawElements(GL_TRIANGLES, rdrD->indexBufferOffset, GL_UNSIGNED_INT, (const void*)0);
 
+    if(showPoints)
+    {
+        glPointSize(5.0f);
+        glDrawElements(GL_POINTS, rdrD->indexBufferOffset, GL_UNSIGNED_INT, (const void*)0);
+    }
+
     //clear state
     glUseProgram(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -294,19 +318,23 @@ void RGP_RendererDrawCall(RGP_RendererData_t* rdrD)
     glDisableVertexAttribArray(1);
     glDisableVertexAttribArray(0);
 
-    RGP_RendererFlush(rdrD);
+    RGP_RendererReset(rdrD);
 }
 
-void RGP_RendererBegin(RGP_RendererData_t* rdrD)
+void RGP_RendererBegin(RGP_RendererData_t* rdrD, RGP_2DCamera_t* cam)
 {
+    glUseProgram(rdrD->programID);
+    glUniformMatrix4fv(glGetUniformLocation(rdrD->programID, "projection"), 1, GL_FALSE, &cam->projection.data[0][0]);
+    glUniformMatrix4fv(glGetUniformLocation(rdrD->programID, "view"), 1, GL_FALSE, &cam->view.data[0][0]);
 }
 
-void RGP_RendererEnd(RGP_RendererData_t* rdrD)
+void RGP_RendererEnd(RGP_RendererData_t* rdrD, Bool showPoints)
 {
-    RGP_RendererDrawCall(rdrD);
+    rdrD->cachedShowPoints = showPoints;
+    RGP_RendererDrawCall(rdrD, showPoints);
 }
 
-void RGP_RendererFlush(RGP_RendererData_t* rdrD)
+void RGP_RendererReset(RGP_RendererData_t* rdrD)
 {
     rdrD->vertexBufferOffset = 0;
     rdrD->indexBufferOffset = 0;

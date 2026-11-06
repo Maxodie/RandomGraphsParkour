@@ -25,6 +25,7 @@ List of the custom build flags:
 |------------------|-------------------------------------------------|
 | RGP_LOGGER       | Enable the custom logger from yapping           |
 | RGP_ASSERT_CORE  | Enable the custom asserts from existing    |
+| ILDA_FORCE_LEFT_HANDED  | Compile Mathilda for left handed maths    |
 
 ___
 By default glfw is set up for Wayland and not X11 (see GLFW.cmake file)

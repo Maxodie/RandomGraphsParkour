@@ -14,6 +14,8 @@ add_executable(RandomGraphsParkour
 
     RandomGraphsParkour/src/Renderer/Renderer.h
     RandomGraphsParkour/src/Renderer/Renderer.c
+    RandomGraphsParkour/src/Renderer/Camera.h
+    RandomGraphsParkour/src/Renderer/Camera.c
 
     RandomGraphsParkour/src/Utils/List.h
     RandomGraphsParkour/src/Utils/List.c

@@ -18,7 +18,7 @@ void RGP_AppInit(RGP_Application_t* app)
     RGP_LOG_SUCCESS("Application initialized");
 
 
-    if(!RGP_WindowCreate(&app->window, app, 1200, 1200, "RGP", RGP_AppHandleEvent))
+    if(!RGP_WindowCreate(&app->window, app, 1200, 720, "RGP", RGP_AppHandleEvent))
     {
         RGP_ASSERT(0, "Window creation failed");
         return;
