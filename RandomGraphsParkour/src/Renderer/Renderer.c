@@ -1,5 +1,6 @@
 #include "Renderer/Renderer.h"
 #include "Core.h"
+#include "Renderer/Text.h"
 #include "Window/Window.h"
 #include "Renderer/Vertex.h"
 
@@ -9,20 +10,26 @@ static const char* vertexShaderData =
 "#version 330 core\n"
 "layout(location = 0) in vec3 pos;\n"
 "layout(location = 1) in vec3 color;\n"
+"layout(location = 2) in vec2 texCoords;\n"
 "uniform mat4 projection;\n"
 "uniform mat4 view;\n"
 "out vec3 outColor;\n"
+"out vec2 outTexCoords;\n"
 "void main(){\n"
 "    gl_Position =  view *projection * vec4(pos, 1.f); \n"
 "    outColor = color; \n"
+"    outTexCoords = texCoords; \n"
  "}";
 
 static const char* fragmentShaderData =
 "#version 330 core\n"
 "out vec4 fragColor;\n"
 "in vec3 outColor;\n"
+"in vec2 outTexCoords;\n"
+"uniform sampler2D tex;\n"
 "void main(){\n"
-"    fragColor = vec4(outColor, 1.f);\n"
+"    vec4 sampled = vec4(1.0, 1.0, 1.0, texture(tex, outTexCoords).r);\n"
+"    fragColor = vec4(outColor, 1.f) * sampled;\n"
 "}";
 
 static const uint32_t g_triangleVertexAmount = 3;
@@ -31,17 +38,27 @@ static const uint32_t g_quadVertexAmount = 4;
 static const uint32_t g_quadIndexAmount = 6;
 static const size_t g_vertexbufferMaxSize = g_quadVertexAmount * 512;
 
-static const ILDA_vector3f g_triangleVertexBufferData[] = {
+static const ILDA_vector3f g_triangleVertexBufferData[] =
+{
     { -0.5f, -0.5f, 0.0f },
     {  0.5f, -0.5f, 0.0f },
     { 0.0f,  0.5f, 0.0f }
 };
 
-static const ILDA_vector3f g_quadVertexBufferData[] = {
+static const ILDA_vector3f g_quadVertexBufferData[] =
+{
     { -0.5f, -0.5f, 0.0f },
     {  0.5f, -0.5f, 0.0f },
     { -0.5f,  0.5f, 0.0f },
     { 0.5f,  0.5f, 0.0f },
+};
+
+static const ILDA_vector2f g_quadTexCoordBufferData[] =
+{
+    {0.0f, 0.0f},
+    {0.0f, 1.0f},
+    {1.0f, 1.0f},
+    {1.0f, 0.0f},
 };
 
 static void RGP_LoadShaders(RGP_RendererData_t* rdrD, const char* vertexData, const char* fragmentData)
@@ -152,10 +169,14 @@ void RGP_RendererInit(RGP_RendererData_t* rdrD, RGP_Window_t* window)
 
     glGenVertexArrays(1, &rdrD->VAO);
     glBindVertexArray(rdrD->VAO);
-    RGP_BindArrayBufferElement(0, 3, GL_FLOAT, GL_FALSE, 6, 0);//position
-    RGP_BindArrayBufferElement(1, 3, GL_FLOAT, GL_FALSE, 6, 3);//color
+    RGP_BindArrayBufferElement(0, 3, GL_FLOAT, GL_FALSE, 8, 0);//position
+    RGP_BindArrayBufferElement(1, 3, GL_FLOAT, GL_FALSE, 8, 3);//color
+    RGP_BindArrayBufferElement(2, 2, GL_FLOAT, GL_FALSE, 8, 6);//texCoords
 
     RGP_LoadShaders(rdrD, vertexShaderData, fragmentShaderData);
+
+    RGP_FontLoaderCreate(&rdrD->fontLoader);
+    RGP_LoadFont(&rdrD->defaultFont, rdrD->fontLoader, "assets/fonts/verdana.ttf", 64);
 
     RGP_LOG_SUCCESS("Renderer initialized");
 }
@@ -163,6 +184,9 @@ void RGP_RendererInit(RGP_RendererData_t* rdrD, RGP_Window_t* window)
 void RGP_RendererShutdown(RGP_RendererData_t* rdrD)
 {
     RGP_ASSERT(rdrD != NULL,  "the given renderer data should not be NULL");
+
+    RGP_UnloadFont(rdrD->defaultFont, rdrD->fontLoader);
+    RGP_FontLoaderDestroy(rdrD->fontLoader);
 
     glDeleteProgram(rdrD->programID);
     glDeleteShader(rdrD->fragmentShaderID);
@@ -177,18 +201,10 @@ void RGP_RendererShutdown(RGP_RendererData_t* rdrD)
     RGP_LOG_SUCCESS("Renderer shutdowned");
 }
 
-void RGP_RendererClear(RGP_RendererData_t* rdrD)
-{
-    RGP_ASSERT(rdrD != NULL,  "the given renderer data should not be NULL");
-
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glClearColor(0.18f, 0.18f, 0.38f, 1.f);
-
-    glViewport(0,0,(GLsizei)rdrD->window->width, (GLsizei)rdrD->window->height);
-}
-
 void RGP_RendererDrawPoint(RGP_RendererData_t* rdrD, const ILDA_vector3f* position, const ILDA_vector3f* color, float size)
 {
+    RGP_ASSERT(rdrD != NULL && position != NULL && color != NULL,  "the given renderer data, position and color should not be NULL");
+
     if(rdrD->vertexBufferOffset + g_triangleVertexAmount >= g_vertexbufferMaxSize || rdrD->indexBufferOffset + g_triangleIndexAmount >= g_vertexbufferMaxSize)
     {
         RGP_RendererDrawCall(rdrD, rdrD->cachedShowPoints);
@@ -202,6 +218,7 @@ void RGP_RendererDrawPoint(RGP_RendererData_t* rdrD, const ILDA_vector3f* positi
         ILDA_vector3f_add(&finalPos, position);
         rdrD->vertexBuffer[rdrD->vertexBufferOffset].position = finalPos;
         rdrD->vertexBuffer[rdrD->vertexBufferOffset].color = *color;
+        rdrD->vertexBuffer[rdrD->vertexBufferOffset].texCoords = (ILDA_vector2f){0.f, 0.f};
         ++rdrD->vertexBufferOffset;
     }
 
@@ -216,6 +233,8 @@ void RGP_RendererDrawPoint(RGP_RendererData_t* rdrD, const ILDA_vector3f* positi
 
 void RGP_RendererDrawLine(RGP_RendererData_t* rdrD, const ILDA_vector3f* position1, const ILDA_vector3f* position2, const ILDA_vector3f* color, float width, Bool isDirected)
 {
+    RGP_ASSERT(rdrD != NULL && position1 != NULL && position2 != NULL && color != NULL,  "the given renderer data, positions and color should not be NULL");
+
     if(rdrD->vertexBufferOffset + g_quadVertexAmount >= g_vertexbufferMaxSize || rdrD->indexBufferOffset + g_quadIndexAmount >= g_vertexbufferMaxSize)
     {
         RGP_RendererDrawCall(rdrD, rdrD->cachedShowPoints);
@@ -250,6 +269,7 @@ void RGP_RendererDrawLine(RGP_RendererData_t* rdrD, const ILDA_vector3f* positio
     {
         rdrD->vertexBuffer[rdrD->vertexBufferOffset].position = linePositions[i];
         rdrD->vertexBuffer[rdrD->vertexBufferOffset].color = *color;
+        rdrD->vertexBuffer[rdrD->vertexBufferOffset].texCoords = (ILDA_vector2f){0.f, 0.f};
         ++rdrD->vertexBufferOffset;
     }
 
@@ -284,6 +304,90 @@ void RGP_RendererDrawLine(RGP_RendererData_t* rdrD, const ILDA_vector3f* positio
         RGP_RendererDrawLine(rdrD, &arrow1, &arrow2, color, width, 0);
         RGP_RendererDrawLine(rdrD, &arrow1, &arrow3, color, width, 0);
     }
+}
+
+void RGP_RendererDrawText(RGP_RendererData_t* rdrD, const ILDA_vector3f* position, const ILDA_vector3f* color, const char* text, float size)
+{
+    RGP_ASSERT(rdrD != NULL && position != NULL && color != NULL,  "the given renderer data, position and color should not be NULL");
+
+    //flush with the right parameters before changing them
+    RGP_RendererDrawCall(rdrD, 0);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glActiveTexture(GL_TEXTURE0);
+
+    size_t textLen = strlen(text);
+    float x = position->x;
+    ILDA_vector3f quadPos[g_quadVertexAmount];
+    memset(quadPos, 0, sizeof(quadPos));
+
+    //temp
+    quadPos[0].z = 0;
+    quadPos[1].z = 0;
+    quadPos[2].z = 0;
+    quadPos[3].z = 0;
+
+    for(uint8_t c = 0; c < textLen; ++c)
+    {
+        const RGP_Character_t* ch;
+        RGP_FontGetCharacter(&ch, rdrD->defaultFont, text[c]);
+
+        float xPos = x + ch->bearing.x * size;
+        float yPos = position->y - (ch->size.y - ch->bearing.y) * size;
+
+        float w = ch->size.x * size;
+        float h = ch->size.y * size;
+
+        quadPos[0].x = xPos;
+        quadPos[0].y = yPos + h;
+
+        quadPos[1].x = xPos;
+        quadPos[1].y = yPos;
+
+        quadPos[2].x = xPos + w;
+        quadPos[2].y = yPos;
+
+        quadPos[3].x = xPos + w;
+        quadPos[3].y = yPos + h;
+
+        for(uint32_t i = 0; i < g_quadVertexAmount; ++i)
+        {
+            rdrD->vertexBuffer[rdrD->vertexBufferOffset].position = quadPos[i];
+            rdrD->vertexBuffer[rdrD->vertexBufferOffset].color = *color;
+            rdrD->vertexBuffer[rdrD->vertexBufferOffset].texCoords = g_quadTexCoordBufferData[i];
+            ++rdrD->vertexBufferOffset;
+        }
+
+        size_t index = rdrD->indexBufferOffset;
+        rdrD->indexBuffer[index] = rdrD->currentIndexOffset;
+        rdrD->indexBuffer[++index] = rdrD->currentIndexOffset + 1;
+        rdrD->indexBuffer[++index] = rdrD->currentIndexOffset + 3;
+        rdrD->indexBuffer[++index] = rdrD->currentIndexOffset + 3;
+        rdrD->indexBuffer[++index] = rdrD->currentIndexOffset + 2;
+        rdrD->indexBuffer[++index] = rdrD->currentIndexOffset + 1;
+
+        rdrD->currentIndexOffset += g_quadVertexAmount;
+        rdrD->indexBufferOffset += g_quadIndexAmount;
+
+        glBindTexture(GL_TEXTURE_2D, ch->texID);
+        RGP_RendererDrawCall(rdrD, 0);
+        x += (ch->advance >> 6) * size;
+    }
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glDisable(GL_BLEND);
+}
+
+void RGP_RendererClear(RGP_RendererData_t* rdrD)
+{
+    RGP_ASSERT(rdrD != NULL,  "the given renderer data should not be NULL");
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClearColor(0.18f, 0.18f, 0.38f, 1.f);
+
+    glViewport(0,0,(GLsizei)rdrD->window->width, (GLsizei)rdrD->window->height);
 }
 
 void RGP_RendererDrawCall(RGP_RendererData_t* rdrD, Bool showPoints)

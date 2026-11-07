@@ -6,13 +6,14 @@
 #include <stdarg.h>
 #include <assert.h>
 #include <memory.h>
+#include <string.h>
 #include <time.h>
 #include <malloc.h>
 
 #include <ILDA_vector/ILDA_vector.h>
 #include <ILDA_matrix/ILDA_matrix.h>
 
-typedef char Bool;
+typedef uint8_t Bool;
 typedef struct RGP_Application_s RGP_Application_t;
 typedef struct RGP_Window_s RGP_Window_t;
 typedef struct RGP_RendererData_s RGP_RendererData_t;
@@ -22,11 +23,11 @@ typedef struct RGP_ListData_s RGP_ListData_t;
 typedef void (*RGP_RoutineFunc_t)(void*);
 
 #ifdef RGP_ASSERT_CORE
-#define RGP_ASSERT(x, msg)\
+#define RGP_ASSERT(x, ...)\
     do\
     {\
         if(!(x))\
-        {RGP_LOG_ERROR_ASSERT(msg); assert(0); }\
+        {RGP_LOG_ERROR_ASSERT(__VA_ARGS__); assert(0); }\
     }\
     while(0)\
 

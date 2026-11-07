@@ -62,7 +62,11 @@ void RGP_EditorUpdate(RGP_EditorScene_t* scene)
         RGP_RendererDrawPoint(&app->rdrD, &scene->graphPoints[i].position, &scene->graphPoints[i].color, 0.1f);
     }
 
+    ILDA_vector3f pos = {0, 0, 0};
+    RGP_RendererDrawText(&app->rdrD, &pos, &color1, "B", 0.001f);
+
     RGP_RendererEnd(&app->rdrD, 0);
+
 
     // ILDA_vector3f location1 = {0.5f, 0.5f, 0.5f};
     // RGP_RendererDrawPoint(&app->rdrD, &location1, &color1);

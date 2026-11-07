@@ -7,3 +7,6 @@
 [submodule "RandomGraphsParkour/vendors/Mathilda/Mathilda"]
 	path = RandomGraphsParkour/vendors/Mathilda/Mathilda
 	url = https://github.com/Maxodie/Mathilda.git
+[submodule "RandomGraphsParkour/vendors/FreeType/freetype"]
+	path = RandomGraphsParkour/vendors/FreeType/freetype
+	url = https://github.com/freetype/freetype
