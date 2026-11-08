@@ -10,6 +10,7 @@ this project uses different external libs:
 * [Glfw3](https://github.com/glfw/glfw) <sub>(Window)</sub>
 * [Nuklear](https://github.com/immediate-mode-ui/nuklear) <sub>(GUI)</sub>
 * [Mathilda](https://github.com/Maxodie/Mathilda) <sub>(Math)</sub>
+* [FreeType](https://github.com/freetype/freetype) <sub>(Text)</sub>
 
 ## Build
 To build on Linux you can use the build.sh file that uses the cmake preset.<br>
@@ -25,7 +26,6 @@ List of the custom build flags:
 |------------------|-------------------------------------------------|
 | RGP_LOGGER       | Enable the custom logger from yapping           |
 | RGP_ASSERT_CORE  | Enable the custom asserts from existing    |
-| ILDA_FORCE_LEFT_HANDED  | Compile Mathilda for left handed maths    |
 
 ___
 By default glfw is set up for Wayland and not X11 (see GLFW.cmake file)
