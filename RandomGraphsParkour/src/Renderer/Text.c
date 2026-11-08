@@ -54,7 +54,7 @@ void RGP_FontLoaderDestroy(RGP_FontLoader_t* fontontLoader)
 
 void RGP_FontGetCharacter(const RGP_Character_t** outCharacter, RGP_Font_t* font, uint32_t id)
 {
-    RGP_ASSERT(*outCharacter != NULL && font != NULL && id < RGP_MAX_LOADED_CHARACTER_COUNT,  "the given *character, font must not be NULL and id must be below %d", RGP_MAX_LOADED_CHARACTER_COUNT);
+    RGP_ASSERT(*outCharacter != NULL && font != NULL && id < RGP_MAX_LOADED_CHARACTER_COUNT,  "the given *character, font must not be NULL and id must be below %d, current id : %d", RGP_MAX_LOADED_CHARACTER_COUNT, id);
     *outCharacter = &font->characters[id];
 }
 

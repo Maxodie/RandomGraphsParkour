@@ -37,4 +37,5 @@ typedef void (*RGP_RoutineFunc_t)(void*);
 
 #include "Log/Log.h"
 #include "Utils/List.h"
+#include "Utils/String.h"
 #include "Utils/ThreadPool.h"

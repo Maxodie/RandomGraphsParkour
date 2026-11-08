@@ -1,6 +1,6 @@
 #include "Core.h"
 #include "Application.h"
-#include "Graph/GraphLoop.h"
+#include "Editor/GraphLoop.h"
 
 int main(int argc, char** argv)
 {

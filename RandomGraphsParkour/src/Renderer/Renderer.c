@@ -311,27 +311,24 @@ void RGP_RendererDrawText(RGP_RendererData_t* rdrD, const ILDA_vector3f* positio
     RGP_ASSERT(rdrD != NULL && position != NULL && color != NULL,  "the given renderer data, position and color should not be NULL");
 
     //flush with the right parameters before changing them
-    RGP_RendererDrawCall(rdrD, 0);
+    size_t textLen = strlen(text);
+    if( rdrD->indexBufferOffset > 0)
+    {
+        RGP_RendererDrawCall(rdrD, 0);
+    }
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glActiveTexture(GL_TEXTURE0);
 
-    size_t textLen = strlen(text);
     float x = position->x;
     ILDA_vector3f quadPos[g_quadVertexAmount];
     memset(quadPos, 0, sizeof(quadPos));
 
-    //temp
-    quadPos[0].z = 0;
-    quadPos[1].z = 0;
-    quadPos[2].z = 0;
-    quadPos[3].z = 0;
-
+    const RGP_Character_t* ch;
     for(uint8_t c = 0; c < textLen; ++c)
     {
-        const RGP_Character_t* ch;
         RGP_FontGetCharacter(&ch, rdrD->defaultFont, text[c]);
 
         float xPos = x + ch->bearing.x * size;
@@ -407,11 +404,13 @@ void RGP_RendererDrawCall(RGP_RendererData_t* rdrD, Bool showPoints)
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, rdrD->indexbufferID);
 
     glDrawElements(GL_TRIANGLES, rdrD->indexBufferOffset, GL_UNSIGNED_INT, (const void*)0);
+    ++rdrD->drawCallCountPerUpdate;
 
     if(showPoints)
     {
         glPointSize(5.0f);
         glDrawElements(GL_POINTS, rdrD->indexBufferOffset, GL_UNSIGNED_INT, (const void*)0);
+        ++rdrD->drawCallCountPerUpdate;
     }
 
     //clear state
@@ -427,6 +426,8 @@ void RGP_RendererDrawCall(RGP_RendererData_t* rdrD, Bool showPoints)
 
 void RGP_RendererBegin(RGP_RendererData_t* rdrD, RGP_2DCamera_t* cam)
 {
+    rdrD->drawCallCountPerUpdate = 0;
+
     glUseProgram(rdrD->programID);
     glUniformMatrix4fv(glGetUniformLocation(rdrD->programID, "projection"), 1, GL_FALSE, &cam->projection.data[0][0]);
     glUniformMatrix4fv(glGetUniformLocation(rdrD->programID, "view"), 1, GL_FALSE, &cam->view.data[0][0]);

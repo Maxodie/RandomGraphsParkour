@@ -1,6 +1,6 @@
 #include "Application.h"
 #include "GUILayer/GUILayer.h"
-#include "Graph/GraphLoop.h"
+#include "Editor/GraphLoop.h"
 #include "Utils/ThreadPool.h"
 
 #include <glad/glad.h>

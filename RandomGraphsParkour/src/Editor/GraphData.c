@@ -1,4 +1,4 @@
-#include "Graph/GraphData.h"
+#include "Editor/GraphData.h"
 #include "Core.h"
 
 void RGP_GenerateGraph(RGP_EditorScene_t* scene, uint32_t pointAmount, Bool canHaveCircuit, Bool isWeigthed)

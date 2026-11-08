@@ -30,6 +30,7 @@ typedef struct RGP_EditorScene_t
     size_t pointCount;
 
     RGP_2DCamera_t cam;
+    size_t drawCallStatAmount;
     Bool isRunning;
     const char padding[7];
 } RGP_EditorScene_t;

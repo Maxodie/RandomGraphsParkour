@@ -2,6 +2,7 @@
 #include  "Core.h"
 #include "Renderer/Camera.h"
 #include "Renderer/Text.h"
+#define RGP_TEXTURE_MAX_COUNT 32
 
 //GLuint is an unisgned int
 struct RGP_RendererData_s
@@ -26,6 +27,11 @@ struct RGP_RendererData_s
     RGP_FontLoader_t* fontLoader;
     RGP_Font_t* defaultFont;
 
+    uint32_t textures[RGP_TEXTURE_MAX_COUNT];
+    uint32_t textureOffset;
+
+    size_t drawCallCountPerUpdate;
+
     Bool cachedShowPoints;
 };
 
@@ -36,6 +42,7 @@ void RGP_RendererDrawPoint(RGP_RendererData_t* rdrD, const ILDA_vector3f* positi
 void RGP_RendererDrawLine(RGP_RendererData_t* rdrD, const ILDA_vector3f* position1, const ILDA_vector3f* position2, const ILDA_vector3f* color, float width, Bool isDirected);
 void RGP_RendererDrawText(RGP_RendererData_t* rdrD, const ILDA_vector3f* position, const ILDA_vector3f* color, const char* text, float size);
 
+uint32_t RGP_RendererAddDrawTexture(RGP_RendererData_t* rdrD, uint32_t texID);
 void RGP_RendererClear(RGP_RendererData_t* rdrD);
 void RGP_RendererDrawCall(RGP_RendererData_t* rdrD, Bool showPoints);
 

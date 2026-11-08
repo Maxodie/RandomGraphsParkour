@@ -22,12 +22,16 @@ add_executable(RandomGraphsParkour
 
     RandomGraphsParkour/src/Utils/List.h
     RandomGraphsParkour/src/Utils/List.c
+    RandomGraphsParkour/src/Utils/String.h
+    RandomGraphsParkour/src/Utils/String.c
     RandomGraphsParkour/src/Utils/ThreadPool.h
     RandomGraphsParkour/src/Utils/ThreadPool.c
 
-    RandomGraphsParkour/src/Graph/GraphData.h
-    RandomGraphsParkour/src/Graph/GraphLoop.h
-    RandomGraphsParkour/src/Graph/GraphLoop.c
+    RandomGraphsParkour/src/Editor/GraphData.h
+    RandomGraphsParkour/src/Editor/GraphLoop.h
+    RandomGraphsParkour/src/Editor/GraphLoop.c
+    RandomGraphsParkour/src/Editor/EditorGUI.h
+    RandomGraphsParkour/src/Editor/EditorGUI.c
 
     RandomGraphsParkour/src/GUILayer/GUILayer.h
     RandomGraphsParkour/src/GUILayer/GUILayer.c
