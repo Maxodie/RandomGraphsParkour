@@ -60,9 +60,9 @@ void RGP_EditorUpdate(RGP_EditorScene_t* scene)
     }
 
     ILDA_vector3f pos = {0, 0, 0};
-    RGP_RendererDrawText(&app->rdrD, &pos, &color1, "2", 0.001f);
+    RGP_RendererDrawText(&app->rdrD, &pos, &color1, "Test openGL text", 0.001f);
     ILDA_vector3f pos2 = {.0f, 0.1f, 0};
-    RGP_RendererDrawText(&app->rdrD, &pos2, &color2, "A", 0.005f);
+    RGP_RendererDrawText(&app->rdrD, &pos2, &color2, "200", 0.005f);
 
     RGP_RendererEnd(&app->rdrD, 0);
 
