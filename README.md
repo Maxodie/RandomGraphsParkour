@@ -1,5 +1,8 @@
 # Random Graphs Parkour
 
+## Show
+<img src="doc/show.png" width="714">
+
 ## Dependencies
 The project contains git submodules, the CMakeLists.txt should update them but if it does not just do
 ```bash
