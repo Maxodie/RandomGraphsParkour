@@ -52,7 +52,7 @@ void RGP_EditorUpdate(RGP_EditorScene_t* scene)
         {
             .position1 = &scene->graphPoints[i - 1].position,
             .position2 = &scene->graphPoints[i].position,
-            .width = 0.01f
+            .width = 0.02f
         };
         RGP_RendererDrawLine(&app->rdrD, &data, &color1, 1);
     }
@@ -65,7 +65,7 @@ void RGP_EditorUpdate(RGP_EditorScene_t* scene)
         RGP_PointData_t data =
         {
             .position = &scene->graphPoints[i].position,
-            .size = 0.3f
+            .size = 0.2f
         };
         RGP_RendererDrawPoint(&app->rdrD, &data, &scene->graphPoints[i].color);
     }
@@ -75,9 +75,9 @@ void RGP_EditorUpdate(RGP_EditorScene_t* scene)
         RGP_PointData_t pointData =
         {
             .position = &scene->graphPoints[i].position,
-            .size = 0.3f
+            .size = 0.2f
         };
-        RGP_RendererDrawPointCenteredText(&app->rdrD, NULL, &pointData, &color2, "5", 0.002f);
+        RGP_RendererDrawPointCenteredText(&app->rdrD, NULL, &pointData, &color2, "5", 0.001f);
 
         if(i > 0)
         {
@@ -85,9 +85,9 @@ void RGP_EditorUpdate(RGP_EditorScene_t* scene)
             {
                 .position1 = &scene->graphPoints[i - 1].position,
                 .position2 = &scene->graphPoints[i].position,
-                .width = 0.3f
+                .width = 0.2f
             };
-            RGP_RendererDrawLineCenteredText(&app->rdrD, NULL, &lineData, &color2, "325", 0.002f);
+            RGP_RendererDrawLineCenteredText(&app->rdrD, NULL, &lineData, &color2, "325", 0.001f);
         }
     }
 
