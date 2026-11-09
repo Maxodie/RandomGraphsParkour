@@ -16,7 +16,9 @@ struct RGP_Character_s
 void RGP_FontLoaderCreate(RGP_FontLoader_t** outFontLoader);
 void RGP_FontLoaderDestroy(RGP_FontLoader_t* fontLoader);
 
-void RGP_FontGetCharacter(const RGP_Character_t** outCharacter, RGP_Font_t* font, uint32_t id);
+void RGP_FontGetCharacter(const RGP_Character_t** outCharacter, const RGP_Font_t* font, uint32_t id);
+
+ILDA_vector2f RGP_FontGetTextTotalSize(const RGP_FontLoader_t* fontLoader, const RGP_Font_t* font, const char* text, float size);
 
 void RGP_LoadFont(RGP_Font_t** outFont, RGP_FontLoader_t* fontLoader, const char* path, uint32_t extractedSize);
 void RGP_UnloadFont(RGP_Font_t* font, RGP_FontLoader_t* fontLoader);

@@ -43,6 +43,11 @@ static const ILDA_vector3f g_triangleVertexBufferData[] =
     { -0.5f, -0.5f, 0.0f },
     {  0.5f, -0.5f, 0.0f },
     { 0.0f,  0.5f, 0.0f }
+
+    //inverted triangle
+    // {  0.0f, -0.5f, 0.0f },
+    // { 0.5f, 0.5f, 0.0f },
+    // { -0.5f,  0.5f, 0.0f }
 };
 
 static const ILDA_vector3f g_quadVertexBufferData[] =
@@ -201,21 +206,21 @@ void RGP_RendererShutdown(RGP_RendererData_t* rdrD)
     RGP_LOG_SUCCESS("Renderer shutdowned");
 }
 
-void RGP_RendererDrawPoint(RGP_RendererData_t* rdrD, const ILDA_vector3f* position, const ILDA_vector3f* color, float size)
+void RGP_RendererDrawPoint(RGP_RendererData_t* rdrD, const RGP_PointData_t* pointData, const ILDA_vector3f* color)
 {
-    RGP_ASSERT(rdrD != NULL && position != NULL && color != NULL,  "the given renderer data, position and color should not be NULL");
+    RGP_ASSERT(rdrD != NULL && pointData != NULL && pointData->position != NULL && color != NULL,  "the given renderer data, position and color should not be NULL");
 
     if(rdrD->vertexBufferOffset + g_triangleVertexAmount >= g_vertexbufferMaxSize || rdrD->indexBufferOffset + g_triangleIndexAmount >= g_vertexbufferMaxSize)
     {
-        RGP_RendererDrawCall(rdrD, rdrD->cachedShowPoints);
+        RGP_RendererDrawCall(rdrD);
     }
 
     ILDA_vector3f finalPos;
     for(int i = 0; i < g_triangleVertexAmount; ++i)
     {
         ILDA_vector3f_copy(&finalPos, &g_triangleVertexBufferData[i]);
-        ILDA_vector3f_mul(&finalPos, size);
-        ILDA_vector3f_add(&finalPos, position);
+        ILDA_vector3f_mul(&finalPos, pointData->size);
+        ILDA_vector3f_add(&finalPos, pointData->position);
         rdrD->vertexBuffer[rdrD->vertexBufferOffset].position = finalPos;
         rdrD->vertexBuffer[rdrD->vertexBufferOffset].color = *color;
         rdrD->vertexBuffer[rdrD->vertexBufferOffset].texCoords = (ILDA_vector2f){0.f, 0.f};
@@ -231,39 +236,39 @@ void RGP_RendererDrawPoint(RGP_RendererData_t* rdrD, const ILDA_vector3f* positi
     rdrD->indexBufferOffset += g_triangleIndexAmount;
 }
 
-void RGP_RendererDrawLine(RGP_RendererData_t* rdrD, const ILDA_vector3f* position1, const ILDA_vector3f* position2, const ILDA_vector3f* color, float width, Bool isDirected)
+void RGP_RendererDrawLine(RGP_RendererData_t* rdrD, const RGP_LineData_t* lineData, const ILDA_vector3f* color, Bool isDirected)
 {
-    RGP_ASSERT(rdrD != NULL && position1 != NULL && position2 != NULL && color != NULL,  "the given renderer data, positions and color should not be NULL");
+    RGP_ASSERT(rdrD != NULL && lineData != NULL && lineData->position1 != NULL && lineData->position2 != NULL && color != NULL,  "the given renderer data, positions and color should not be NULL");
 
     if(rdrD->vertexBufferOffset + g_quadVertexAmount >= g_vertexbufferMaxSize || rdrD->indexBufferOffset + g_quadIndexAmount >= g_vertexbufferMaxSize)
     {
-        RGP_RendererDrawCall(rdrD, rdrD->cachedShowPoints);
+        RGP_RendererDrawCall(rdrD);
     }
 
-    ILDA_vector3f dir = *position2;
-    ILDA_vector3f_sub(&dir, position1);
+    ILDA_vector3f dir = *lineData->position2;
+    ILDA_vector3f_sub(&dir, lineData->position1);
     dir = ILDA_vector3f_normalize(&dir);
 
     ILDA_vector3f normal = { -dir.y, dir.x, 0 };
-    ILDA_vector3f_mul(&normal, width * 0.5f);
+    ILDA_vector3f_mul(&normal, lineData->width * 0.5f);
 
     ILDA_vector3f linePositions[g_quadVertexAmount];
     memset(linePositions, 0.0f, sizeof(linePositions));
     linePositions[0].x = -normal.x;
     linePositions[0].y = -normal.y;
-    ILDA_vector3f_add(&linePositions[0], position1);
+    ILDA_vector3f_add(&linePositions[0], lineData->position1);
 
     linePositions[1].x = -normal.x;
     linePositions[1].y = -normal.y;
-    ILDA_vector3f_add(&linePositions[1], position2);
+    ILDA_vector3f_add(&linePositions[1], lineData->position2);
 
     linePositions[2].x = normal.x;
     linePositions[2].y = normal.y;
-    ILDA_vector3f_add(&linePositions[2], position1);
+    ILDA_vector3f_add(&linePositions[2], lineData->position1);
 
     linePositions[3].x = normal.x;
     linePositions[3].y = normal.y;
-    ILDA_vector3f_add(&linePositions[3], position2);
+    ILDA_vector3f_add(&linePositions[3], lineData->position2);
 
     for(uint32_t i = 0; i < g_quadVertexAmount; ++i)
     {
@@ -286,35 +291,104 @@ void RGP_RendererDrawLine(RGP_RendererData_t* rdrD, const ILDA_vector3f* positio
 
     if(isDirected)
     {
-        ILDA_vector3f arrow1 = arrow1 = ILDA_vector3f_lerp(position1, position2, 0.5f);
+        ILDA_vector3f arrow1 = arrow1 = ILDA_vector3f_lerp(lineData->position1, lineData->position2, 0.5f);
 
-        ILDA_vector3f distance = *position2;
-        ILDA_vector3f_sub(&distance, position1);
+        ILDA_vector3f distance = *lineData->position2;
+        ILDA_vector3f_sub(&distance, lineData->position1);
         float length = ILDA_vector3f_length(&distance);
 
-        float arrowLerpLength = 0.5f - width * 3.0f / length;
-        ILDA_vector3f arrow2 = ILDA_vector3f_lerp(position1, position2, arrowLerpLength);
+        float arrowLerpLength = 0.5f - lineData->width * 3.0f / length;
+        ILDA_vector3f arrow2 = ILDA_vector3f_lerp(lineData->position1, lineData->position2, arrowLerpLength);
         arrow2.x += normal.x * 5;
         arrow2.y += normal.y * 5;
 
-        ILDA_vector3f arrow3 = ILDA_vector3f_lerp(position1, position2, arrowLerpLength);
+        ILDA_vector3f arrow3 = ILDA_vector3f_lerp(lineData->position1, lineData->position2, arrowLerpLength);
         arrow3.x -= normal.x * 5;
         arrow3.y -= normal.y * 5;
 
-        RGP_RendererDrawLine(rdrD, &arrow1, &arrow2, color, width, 0);
-        RGP_RendererDrawLine(rdrD, &arrow1, &arrow3, color, width, 0);
+        RGP_LineData_t arrow1Data =
+        {
+            .position1 = &arrow1,
+            .position2 = &arrow2,
+            .width = lineData->width
+        };
+
+        RGP_LineData_t arrow2Data =
+        {
+            .position1 = &arrow1,
+            .position2 = &arrow3,
+            .width = lineData->width
+        };
+        RGP_RendererDrawLine(rdrD, &arrow1Data, color, 0);
+        RGP_RendererDrawLine(rdrD, &arrow2Data, color, 0);
     }
 }
 
-void RGP_RendererDrawText(RGP_RendererData_t* rdrD, const ILDA_vector3f* position, const ILDA_vector3f* color, const char* text, float size)
+void RGP_RendererDrawPointCenteredText(RGP_RendererData_t* rdrD, const RGP_Font_t* font, const RGP_PointData_t* pointData, const ILDA_vector3f* color, const char* text, float textSize)
 {
-    RGP_ASSERT(rdrD != NULL && position != NULL && color != NULL,  "the given renderer data, position and color should not be NULL");
+    RGP_ASSERT(text != NULL && rdrD != NULL && pointData != NULL && pointData->position != NULL && color != NULL,  "the given text, renderer data, position and color should not be NULL");
+
+    if(font == NULL)
+    {
+        font = rdrD->defaultFont;
+    }
+
+    ILDA_vector2f totalTextSize = RGP_FontGetTextTotalSize(rdrD->fontLoader, font, text, textSize);
+    ILDA_vector3f computedPosition = *pointData->position;
+
+    computedPosition.x -= totalTextSize.x / 2.f;
+    computedPosition.y -= totalTextSize.y / 2.f + (pointData->size / 2.f / 3.f);// (pointData->size / 2.f / 3.f) corresponds to 2/3 of the triangle for the "esthetic center"
+
+    RGP_RendererDrawText(rdrD, font, &computedPosition, color, text, textSize);
+}
+
+void RGP_RendererDrawLineCenteredText(RGP_RendererData_t* rdrD, const RGP_Font_t* font, const RGP_LineData_t* lineData, const ILDA_vector3f* color, const char* text, float textSize)
+{
+    RGP_ASSERT(text != NULL && rdrD != NULL && lineData->position1 != NULL && lineData->position2 != NULL && color != NULL,  "the given text, renderer data, positions and color should not be NULL");
+
+    if(font == NULL)
+    {
+        font = rdrD->defaultFont;
+    }
+
+    ILDA_vector2f totalTextSize = RGP_FontGetTextTotalSize(rdrD->fontLoader, font, text, textSize);
+
+    //distance
+    ILDA_vector3f dir = *lineData->position2;
+    ILDA_vector3f_sub(&dir, lineData->position1);
+
+    //middle of the line
+    ILDA_vector3f computedPosition = dir;
+    ILDA_vector3f_mul(&computedPosition, 0.5f);
+    ILDA_vector3f_add(&computedPosition, lineData->position1);
+    // ILDA_vector3f computedPosition = ILDA_vector3f_lerp(lineData->position1, lineData->position2, 0.5f); also works but has useless operations
+
+    dir = ILDA_vector3f_normalize(&dir);
+
+    ILDA_vector3f normal = { -dir.y, dir.x, 0 };
+    ILDA_vector3f_mul(&normal, lineData->width * 0.5f);
+
+    computedPosition.x -= totalTextSize.x / 2.f;
+    computedPosition.y -= totalTextSize.y / 2.f;
+
+    ILDA_vector3f_add(&computedPosition, &normal);
+
+    RGP_RendererDrawText(rdrD, font, &computedPosition, color, text, textSize);
+}
+
+void RGP_RendererDrawText(RGP_RendererData_t* rdrD, const RGP_Font_t* font, const ILDA_vector3f* position, const ILDA_vector3f* color, const char* text, float size)
+{
+    RGP_ASSERT(text != NULL && rdrD != NULL && position != NULL && color != NULL,  "the given renderer data, position and color should not be NULL");
+    if(font == NULL)
+    {
+        font = rdrD->defaultFont;
+    }
 
     //flush with the right parameters before changing them
     size_t textLen = strlen(text);
     if( rdrD->indexBufferOffset > 0)
     {
-        RGP_RendererDrawCall(rdrD, 0);
+        RGP_RendererDrawCall(rdrD);
     }
 
     glEnable(GL_BLEND);
@@ -327,7 +401,7 @@ void RGP_RendererDrawText(RGP_RendererData_t* rdrD, const ILDA_vector3f* positio
     memset(quadPos, 0, sizeof(quadPos));
 
     const RGP_Character_t* ch;
-    for(uint8_t c = 0; c < textLen; ++c)
+    for(size_t c = 0; c < textLen; ++c)
     {
         RGP_FontGetCharacter(&ch, rdrD->defaultFont, text[c]);
 
@@ -369,7 +443,7 @@ void RGP_RendererDrawText(RGP_RendererData_t* rdrD, const ILDA_vector3f* positio
         rdrD->indexBufferOffset += g_quadIndexAmount;
 
         glBindTexture(GL_TEXTURE_2D, ch->texID);
-        RGP_RendererDrawCall(rdrD, 0);
+        RGP_RendererDrawCall(rdrD);
         x += (ch->advance >> 6) * size;
     }
 
@@ -387,7 +461,7 @@ void RGP_RendererClear(RGP_RendererData_t* rdrD)
     glViewport(0,0,(GLsizei)rdrD->window->width, (GLsizei)rdrD->window->height);
 }
 
-void RGP_RendererDrawCall(RGP_RendererData_t* rdrD, Bool showPoints)
+void RGP_RendererDrawCall(RGP_RendererData_t* rdrD)
 {
     //buffers
     glBindBuffer(GL_ARRAY_BUFFER, rdrD->vertexbufferID);
@@ -406,7 +480,7 @@ void RGP_RendererDrawCall(RGP_RendererData_t* rdrD, Bool showPoints)
     glDrawElements(GL_TRIANGLES, rdrD->indexBufferOffset, GL_UNSIGNED_INT, (const void*)0);
     ++rdrD->drawCallCountPerUpdate;
 
-    if(showPoints)
+    if(rdrD->cachedShowPoints)
     {
         glPointSize(5.0f);
         glDrawElements(GL_POINTS, rdrD->indexBufferOffset, GL_UNSIGNED_INT, (const void*)0);
@@ -436,7 +510,10 @@ void RGP_RendererBegin(RGP_RendererData_t* rdrD, RGP_2DCamera_t* cam)
 void RGP_RendererEnd(RGP_RendererData_t* rdrD, Bool showPoints)
 {
     rdrD->cachedShowPoints = showPoints;
-    RGP_RendererDrawCall(rdrD, showPoints);
+    if(rdrD->indexBufferOffset > 0)
+    {
+        RGP_RendererDrawCall(rdrD);
+    }
 }
 
 void RGP_RendererReset(RGP_RendererData_t* rdrD)

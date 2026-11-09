@@ -52,10 +52,33 @@ void RGP_FontLoaderDestroy(RGP_FontLoader_t* fontontLoader)
     RGP_LOG_SUCCESS("fontloader destroyed");
 }
 
-void RGP_FontGetCharacter(const RGP_Character_t** outCharacter, RGP_Font_t* font, uint32_t id)
+void RGP_FontGetCharacter(const RGP_Character_t** outCharacter, const RGP_Font_t* font, uint32_t id)
 {
-    RGP_ASSERT(*outCharacter != NULL && font != NULL && id < RGP_MAX_LOADED_CHARACTER_COUNT,  "the given *character, font must not be NULL and id must be below %d, current id : %d", RGP_MAX_LOADED_CHARACTER_COUNT, id);
+    RGP_ASSERT(outCharacter != NULL && font != NULL && id < RGP_MAX_LOADED_CHARACTER_COUNT,  "the given *character, font must not be NULL and id must be below %d, current id : %d", RGP_MAX_LOADED_CHARACTER_COUNT, id);
     *outCharacter = &font->characters[id];
+}
+
+ILDA_vector2f RGP_FontGetTextTotalSize(const RGP_FontLoader_t* fontLoader, const RGP_Font_t* font, const char* text, float size)
+{
+    RGP_ASSERT(fontLoader != NULL && font != NULL,  "the given fontLoader, font must not be NULL");
+
+    ILDA_vector2f position = { 0.0f, 0.0f };
+    size_t textLen = strlen(text);
+    const RGP_Character_t* ch;
+    for(size_t c = 0; c < textLen; ++c)
+    {
+        RGP_FontGetCharacter(&ch, font, text[c]);
+
+        position.x += (ch->advance >> 6) * size;
+
+        float ySize = ch->size.y * size;
+        if(position.y < ySize)
+        {
+            position.y = ySize;
+        }
+    }
+
+    return position;
 }
 
 void RGP_LoadFont(RGP_Font_t** outFont, RGP_FontLoader_t* fontLoader, const char* path, uint32_t extractedSize)

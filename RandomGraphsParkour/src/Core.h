@@ -20,6 +20,9 @@ typedef struct RGP_RendererData_s RGP_RendererData_t;
 typedef struct RGP_Vertex_s RGP_Vertex_t;
 typedef struct RGP_ListData_s RGP_ListData_t;
 
+typedef struct RGP_PointData_s RGP_PointData_t;
+typedef struct RGP_LineData_s RGP_LineData_t;
+
 typedef void (*RGP_RoutineFunc_t)(void*);
 
 #ifdef RGP_ASSERT_CORE

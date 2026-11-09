@@ -41,14 +41,20 @@ void RGP_EditorUpdate(RGP_EditorScene_t* scene)
     RGP_Application_t* app = scene->app;
 
     ILDA_vector3f color1 = {1.f, 0.0f, 0.5f};
-    ILDA_vector3f color2 = {0.0f, 0.0f, 1.0f};
+    ILDA_vector3f color2 = {0.0f, 1.0f, 0.0f};
 
     RGP_RendererBegin(&app->rdrD, &scene->cam);
 
 
     for(size_t i = 1; i < scene->pointCount; ++i)
     {
-        RGP_RendererDrawLine(&app->rdrD, &scene->graphPoints[i - 1].position, &scene->graphPoints[i].position, &color2, 0.01f, 1);
+        RGP_LineData_t data =
+        {
+            .position1 = &scene->graphPoints[i - 1].position,
+            .position2 = &scene->graphPoints[i].position,
+            .width = 0.01f
+        };
+        RGP_RendererDrawLine(&app->rdrD, &data, &color1, 1);
     }
 
     // RGP_RendererEnd(&app->rdrD, 1);
@@ -56,13 +62,34 @@ void RGP_EditorUpdate(RGP_EditorScene_t* scene)
 
     for(size_t i = 0; i < scene->pointCount; ++i)
     {
-        RGP_RendererDrawPoint(&app->rdrD, &scene->graphPoints[i].position, &scene->graphPoints[i].color, 0.1f);
+        RGP_PointData_t data =
+        {
+            .position = &scene->graphPoints[i].position,
+            .size = 0.3f
+        };
+        RGP_RendererDrawPoint(&app->rdrD, &data, &scene->graphPoints[i].color);
     }
 
-    ILDA_vector3f pos = {0, 0, 0};
-    RGP_RendererDrawText(&app->rdrD, &pos, &color1, "Test openGL text", 0.001f);
-    ILDA_vector3f pos2 = {.0f, 0.1f, 0};
-    RGP_RendererDrawText(&app->rdrD, &pos2, &color2, "200", 0.005f);
+    for(size_t i = 0; i < scene->pointCount; ++i)
+    {
+        RGP_PointData_t pointData =
+        {
+            .position = &scene->graphPoints[i].position,
+            .size = 0.3f
+        };
+        RGP_RendererDrawPointCenteredText(&app->rdrD, NULL, &pointData, &color2, "5", 0.002f);
+
+        if(i > 0)
+        {
+            RGP_LineData_t lineData =
+            {
+                .position1 = &scene->graphPoints[i - 1].position,
+                .position2 = &scene->graphPoints[i].position,
+                .width = 0.3f
+            };
+            RGP_RendererDrawLineCenteredText(&app->rdrD, NULL, &lineData, &color2, "325", 0.002f);
+        }
+    }
 
     RGP_RendererEnd(&app->rdrD, 0);
 
