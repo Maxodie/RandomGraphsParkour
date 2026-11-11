@@ -16,7 +16,7 @@ static const char* vertexShaderData =
 "out vec3 outColor;\n"
 "out vec2 outTexCoords;\n"
 "void main(){\n"
-"    gl_Position =  view *projection * vec4(pos, 1.f); \n"
+"    gl_Position = projection * view * vec4(pos, 1.f); \n"
 "    outColor = color; \n"
 "    outTexCoords = texCoords; \n"
  "}";
@@ -366,10 +366,11 @@ void RGP_RendererDrawLineCenteredText(RGP_RendererData_t* rdrD, const RGP_Font_t
     dir = ILDA_vector3f_normalize(&dir);
 
     ILDA_vector3f normal = { -dir.y, dir.x, 0 };
-    ILDA_vector3f_mul(&normal, lineData->width * 0.5f);
 
-    computedPosition.x -= totalTextSize.x / 2.f;
-    computedPosition.y -= totalTextSize.y / 2.f;
+    computedPosition.x += totalTextSize.x / 2.f;
+    computedPosition.y += totalTextSize.y / 2.f;
+
+    ILDA_vector3f_mul(&normal, lineData->width * 0.5f);
 
     ILDA_vector3f_add(&computedPosition, &normal);
 

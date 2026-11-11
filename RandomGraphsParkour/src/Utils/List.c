@@ -19,10 +19,11 @@ void* RGP_ListInit_imp(size_t reserve, size_t typeSize)
     return data + sizeof(RGP_ListData_t);
 }
 
-void RGP_ListDelete_imp(void* list)
+void RGP_ListDelete_imp(void** list)
 {
     RGP_ASSERT(list != NULL, "list should not be NULL");
-    free(list - sizeof(RGP_ListData_t));
+    free(*list - sizeof(RGP_ListData_t));
+    *list = NULL;
 }
 
 void RGP_ListAddUb_imp(void** list)

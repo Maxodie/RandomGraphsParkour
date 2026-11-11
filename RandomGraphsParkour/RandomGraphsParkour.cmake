@@ -28,6 +28,7 @@ add_executable(RandomGraphsParkour
     RandomGraphsParkour/src/Utils/ThreadPool.c
 
     RandomGraphsParkour/src/Editor/GraphData.h
+    RandomGraphsParkour/src/Editor/GraphData.c
     RandomGraphsParkour/src/Editor/GraphLoop.h
     RandomGraphsParkour/src/Editor/GraphLoop.c
     RandomGraphsParkour/src/Editor/EditorGUI.h

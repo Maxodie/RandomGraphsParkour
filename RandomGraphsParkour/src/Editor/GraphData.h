@@ -8,8 +8,7 @@ struct RGP_GraphPoint_s
 {
     ILDA_vector3f position;
     ILDA_vector3f color;
-    RGP_GraphArc_t* nexts;
-    RGP_GraphArc_t* previous;
+    RGP_GraphArc_t** nexts;
     int32_t value;
 };
 
@@ -18,6 +17,7 @@ struct RGP_GraphArc_s
     RGP_GraphPoint_t* start;
     RGP_GraphPoint_t* end;
     int32_t value;
+    ILDA_vector3f color;
     Bool isDirected;
     Bool isWeigthed;
 };
@@ -28,6 +28,7 @@ typedef struct RGP_EditorScene_t
     RGP_GraphPoint_t* graphPoints;
     RGP_GraphArc_t* arcs;
     size_t pointCount;
+    size_t arcCount;
 
     RGP_2DCamera_t cam;
     size_t drawCallStatAmount;
@@ -35,4 +36,7 @@ typedef struct RGP_EditorScene_t
     const char padding[7];
 } RGP_EditorScene_t;
 
-void RGP_GenerateGraph(RGP_EditorScene_t* scene, uint32_t pointAmount, Bool canHaveCircuit, Bool isWeigthed);
+void RGP_GraphGeneratorProcess(RGP_EditorScene_t* scene);
+
+void RGP_GraphGenerate(RGP_EditorScene_t* scene, uint32_t pointAmount, Bool canHaveCircuit, Bool isWeigthed);
+void RGP_GraphDestroy(RGP_EditorScene_t* scene);

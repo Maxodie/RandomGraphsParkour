@@ -9,9 +9,12 @@
 #include <string.h>
 #include <time.h>
 #include <malloc.h>
+#include <limits.h>
+#include <float.h>
 
 #include <ILDA_vector/ILDA_vector.h>
 #include <ILDA_matrix/ILDA_matrix.h>
+#include <ILDA_utils/ILDA_utils.h>
 
 typedef uint8_t Bool;
 typedef struct RGP_Application_s RGP_Application_t;
